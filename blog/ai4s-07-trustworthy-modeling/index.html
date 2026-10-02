@@ -1,0 +1,107 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1"><link rel=canonical href=https://SnailZhan.github.io/blog/ai4s-07-trustworthy-modeling/><title>AI4S 空间结构（七）：从模型预测到可信科学计算 - Zhan's Space</title><meta property="og:title" content="AI4S 空间结构（七）：从模型预测到可信科学计算 - Zhan's Space"><meta property="og:site_name" content="Zhan's Space"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:published_time" content="2026-10-02T15:00:00+08:00"><meta property="article:modified_time" content="2026-10-02T15:00:00+08:00"><meta property="article:tag" content="AI4S"><meta property="article:tag" content="Deep Potential"><meta property="article:tag" content="DPA-2"><meta property="article:tag" content="Scientific Machine Learning"><meta property="article:author" content><meta property="og:image" content="https://SnailZhan.github.io/img/avatar.jpg"><meta property="og:image:width" content="400"><meta property="og:image:height" content="400"><meta property="og:image:alt" content="AI4S 空间结构（七）：从模型预测到可信科学计算"><meta property="og:url" content="https://SnailZhan.github.io/blog/ai4s-07-trustworthy-modeling/"><meta property="og:description" content="以 Deep Potential、DPA-2 和缺陷材料代理模型为案例，讨论损失、对称测试、结构外划分与模拟级验证。"><meta name=Description property="description" content="以 Deep Potential、DPA-2 和缺陷材料代理模型为案例，讨论损失、对称测试、结构外划分与模拟级验证。"><meta name=keywords content="ai4s,deep potential,dpa-2,scientific machine learning"><link rel=stylesheet href=https://SnailZhan.github.io/css/style.min.css><link rel=icon type=image/svg+xml href=/favicon.svg><link rel="shortcut icon" href=/favicon.svg><link rel=manifest href=/site.webmanifest><link href=https://SnailZhan.github.io/index.xml type=application/atom+xml rel=alternate title="Sitewide Atom feed"><meta name=theme-color content="#f5f5f5" media="(prefers-color-scheme: light)"><meta name=theme-color content="#27272a" media="(prefers-color-scheme: dark)"><script>function updateMode(){localStorage.theme==="dark"||!("theme"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function toggleMode(){localStorage.theme==="dark"?localStorage.theme="light":localStorage.theme="dark",updateMode()}window.onload=updateMode();function toggleMenu(){let e=document.getElementById("navbar-default");e.classList.contains("hidden")?e.classList.remove("hidden"):e.classList.add("hidden")}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/SnailZhan.github.io\/blog\/ai4s-07-trustworthy-modeling\/"},"headline":"AI4S 空间结构（七）：从模型预测到可信科学计算","description":"以 Deep Potential、DPA-2 和缺陷材料代理模型为案例，讨论损失、对称测试、结构外划分与模拟级验证。","datePublished":"2026-10-02T15:00:00\u002b08:00","dateModified":"2026-10-02T15:00:00\u002b08:00","author":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"publisher":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"wordCount":328,"keywords":["AI4S","Deep Potential","DPA-2","Scientific Machine Learning"]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/SnailZhan.github.io\/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https:\/\/SnailZhan.github.io\/blog\/"},{"@type":"ListItem","position":3,"name":"AI4S 空间结构（七）：从模型预测到可信科学计算","item":"https:\/\/SnailZhan.github.io\/blog\/ai4s-07-trustworthy-modeling\/"}]}</script></head><body><header class="md:px-0 px-2"><nav><div class="container flex flex-wrap justify-between items-center mx-auto"><div class="nav-main my-2.5"><a href=https://SnailZhan.github.io/ class="nav-title py-2.5 text-2xl
+text-zinc-600 dark:text-zinc-300 hover:border-b-0">Zhan's Space</a></div><button type=button onclick=toggleMenu() class="inline-flex items-center p-2 ml-3
+text-sm text-gray-500
+rounded-lg md:hidden hover:bg-gray-100
+focus:outline-none focus:ring-2
+focus:ring-gray-200 dark:text-gray-400
+dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls=navbar-default aria-expanded=false>
+<span class=sr-only>Open main menu</span>
+<svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4A1 1 0 013 5zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg></button><div class="hidden w-full md:block md:w-auto" id=navbar-default><ul class="grid md:grid-flow-col items-center justify-between text-lg
+my-2.5 grid-cols-1 pl-0 text-center"><li class="p-2.5 md:first:pl-0 md:border-none border-b dark:border-zinc-500 list-none"><a class="text-zinc-600 dark:text-zinc-300
+hover:border-b-0 transition-colors duration-150" href=/blog/>Blog</a></li><li class="h-7 pl-2.5 pr-0 list-none"><button type=button onclick=toggleMode() class=h-full aria-label="Toggle between dark and light mode">
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 hidden dark:inline" id=ligh-mode-button-img alt="A sun icon for switching to light mode" src=https://SnailZhan.github.io/img/light_mode.svg>
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 inline dark:hidden" id=dark-mode-button-img alt="A moon icon for switching to dark mode" src=https://SnailZhan.github.io/img/dark_mode.svg></button></li></ul></div></div></nav></header><main class="content h-card container mt-2 m-auto
+leading-loose md:px-0 px-2 z-0" role=main><div class=article-page><nav class=article-back><a href=https://SnailZhan.github.io/blog/ class=article-back__link><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+All posts</a></nav><header class=article-hero><div class=article-hero__meta><span class=article-hero__eyebrow>Blog Post</span>
+<time class=article-hero__date datetime=2026-10-02T15:00:00+0800 itemprop=datePublished>October 2, 2026
+</time><span class=article-hero__reading-time>12 min read</span></div><h1 class=article-hero__title itemprop=name>AI4S 空间结构（七）：从模型预测到可信科学计算</h1><p class=article-hero__headline itemprop=headline>低测试误差只是验证的起点，可信科学模型还要经受对称性、外推和下游物理量检查。</p><ul class=article-hero__tags aria-label=Tags><li class=article-hero__tag>AI4S</li><li class=article-hero__tag>Deep Potential</li><li class=article-hero__tag>DPA-2</li><li class=article-hero__tag>Scientific Machine Learning</li></ul></header><article class="article-body e-content h-entry" itemprop=mainEntity itemscope itemtype=http://schema.org/BlogPosting><meta itemprop=author content="Yuxuan Zhan"><blockquote><p>系列导航：<a href=/blog/ai4s-06-domain-cases/>上一篇：蛋白质、晶体与网格如何选择模型</a> · 第 7 篇</p></blockquote><p>从科学对象到模型预测，前六篇依次讨论了关系表示、消息传递、三维几何与对称约束。真正用于科学计算时，架构只是工作流的一部分。训练标签来自哪种理论或实验口径，数据如何划分，对称性是否在实现中成立，预测进入模拟后是否稳定，这些问题共同决定模型能否可信使用。</p><p><img src=/img/blog/ai4s/07-model-families.png alt=常见空间图模型保留不同层次的几何信息。></p><p>图 1：拓扑、距离/角度、低阶向量和高阶不可约表示形成不同模型家族。它们是信息与成本的取舍，并非单向优劣排名。图源为本系列配套课件。</p><h2 id=原子间势的学习目标>原子间势的学习目标</h2><p>给定原子种类 $\mathbf Z=(Z_1,\ldots,Z_N)$、坐标 $\mathbf R$ 和可选晶格 $\mathbf L$，原子势模型预测总能量</p>$$
+\widehat E_\theta=E_\theta(\mathbf Z,\mathbf R,\mathbf L).
+$$<p>原子力和应力可由能量导数得到：</p>$$
+\widehat{\mathbf F}_i
+=-\frac{\partial\widehat E_\theta}{\partial\mathbf r_i},
+\qquad
+\widehat{\boldsymbol\sigma}
+=\frac{1}{\Omega}
+\frac{\partial\widehat E_\theta}{\partial\boldsymbol\varepsilon},
+$$<p>其中 $\Omega$ 是晶胞体积，$\boldsymbol\varepsilon$ 是应变张量。不同软件对维里和应力的符号、归一化及单位可能采用不同约定，训练前必须统一标签口径。</p><p>联合损失可写为</p>$$
+\mathcal L
+=\lambda_E\,\ell_E(\widehat E,E)
++\lambda_F\frac1N\sum_{i=1}^{N}
+\left\lVert\widehat{\mathbf F}_i-\mathbf F_i\right\rVert_2^2
++\lambda_\sigma\,
+\ell_\sigma(\widehat{\boldsymbol\sigma},\boldsymbol\sigma).
+$$<p>$\lambda_E,\lambda_F,\lambda_\sigma$ 控制不同监督项的相对尺度。它们不能脱离单位、样本中原子数以及标签噪声直接比较。力标签每个构型提供 $3N$ 个分量，若不恰当归一化，力项可能仅凭数量压过能量项。</p><h2 id=deep-potential从局部原子能到可扩展模拟>Deep Potential：从局部原子能到可扩展模拟</h2><p>Deep Potential 将总能量分解为局部原子贡献：</p>$$
+\widehat E_\theta
+=\sum_{i=1}^{N}
+\mathcal F_\theta\!\left(
+\mathcal D_i(\mathcal N_i)
+\right).
+$$<p>$\mathcal N_i$ 是中心原子 $i$ 在截断半径内的局部环境，$\mathcal D_i$ 是描述器，$\mathcal F_\theta$ 把描述器映射为原子能贡献。所有原子共享同一网络，求和读出保持置换不变和能量广延性；有限邻域让成本在平均邻居数稳定时近似随 $N$ 线性增长。</p><p>早期 Deep Potential 通过局部参考框架处理平移、旋转和同类原子置换。其思想是先把每个局部环境对齐到规范坐标，再使用普通网络。若用于定轴的邻居在相近构型中交换次序，局部框架可能不连续；这也是后续直接等变表示的重要动机之一。</p><p>势能模型的验证不能停留在独立构型上的能量和力 MAE。DPMD 还将模型放入分子动力学，比较液态水、冰和有机体系中的密度、径向分布函数、角分布函数与序参量。单点误差检验势能面局部近似，轨迹统计量检验误差经长时间积分后是否仍能保持目标物理行为。</p><h2 id=dpa-2共享表示与任务专属标签口径>DPA-2：共享表示与任务专属标签口径</h2><p>不同数据集可能采用不同交换—相关泛函、赝势、基组或数值设置。即使输入原子结构相同，这些 DFT 配置也未必定义完全相同的势能面。把所有能量标签直接混合到一个输出头，会让模型面对互相不一致的监督。</p><p>DPA-2 的核心结构可抽象为共享描述器和数据集专属拟合头。对第 $k$ 个任务，</p>$$
+\mathbf z_i
+=\mathcal D_{\theta_{\mathrm{shared}}}
+(\mathbf Z,\mathbf R,\mathbf L)_i,
+$$$$
+\widehat E^{(k)}
+=\sum_i
+\mathcal F_{\theta_k}^{(k)}(\mathbf z_i).
+$$<p>共享描述器学习可迁移的原子环境表示，$\mathcal F^{(k)}$ 保留第 $k$ 个数据集的能量口径。多任务目标写成</p>$$
+\mathcal L_{\mathrm{multi}}
+=\sum_{k=1}^{K}\alpha_k\mathcal L_k,
+$$<p>其中 $\alpha_k$ 控制任务采样和损失权重。原工作在 18 个异质数据集上进行预训练，覆盖 73 种元素，并通过零样本测试、不同微调样本量的学习曲线和下游模拟评估迁移能力。</p><p>“通用原子模型”在这里指共享表示可以服务多个体系，并不意味着对任意元素组合、相态、温压范围和计算口径都无需检查。DPA-2 原文也报告了多任务训练在部分预训练域内的能量误差高于单任务训练，并把二维材料覆盖不足列为局限。共享表示提高迁移可能性，不能替代目标域数据与验证。</p><h2 id=对称性需要通过数值测试验证>对称性需要通过数值测试验证</h2><p>架构名称不能证明具体实现没有破坏对称性。邻域搜索、周期边、特征归一化、张量索引或读出中的一个错误，都可能让理论等变的模型在代码中失效。</p><p>对测试构型 $x$ 采样随机群作用 $g$，其旋转部分为 $Q$。标量能量的不变误差可定义为</p><h1 id=varepsilon_mathrminv>$$
+\varepsilon_{\mathrm{inv}}</h1><p>\frac{\mathbb E_g
+\left|\widehat E(gx)-\widehat E(x)\right|}
+{\mathbb E\left|\widehat E(x)\right|+\delta},
+$$</p><p>力的等变误差定义为</p><h1 id=varepsilon_mathrmeq>$$
+\varepsilon_{\mathrm{eq}}</h1><p>\frac{\mathbb E_g
+\left\lVert
+\widehat{\mathbf F}(gx)-Q\widehat{\mathbf F}(x)
+\right\rVert_2}
+{\mathbb E
+\left\lVert\widehat{\mathbf F}(x)\right\rVert_2+\delta}.
+$$</p><p>$\delta>0$ 防止分母过小。测试还应加入随机平移和同类节点置换。非零误差需要区分浮点误差、截断边界导致的邻域变化、周期图构建不一致与架构本身不满足对称性。</p><h2 id=随机拆分常常回答了过于简单的问题>随机拆分常常回答了过于简单的问题</h2><p>分子动力学轨迹中的相邻帧高度相似，化学数据中的近邻骨架也可能只差少量取代基。逐样本随机拆分会把相近结构放到训练和测试两侧，使测试误差主要衡量局部插值。</p><p>结构外评估应围绕部署场景分组。分子任务可以按骨架、分子大小或构象簇划分；晶体任务可按化学体系、晶体原型或整条弛豫轨迹分组；时间模拟应按完整轨迹或时间块隔离。训练集 $\mathcal D_{\mathrm{train}}$ 与测试集 $\mathcal D_{\mathrm{test}}$ 的关系应满足</p>$$
+\operatorname{group}(x_a)
+\neq
+\operatorname{group}(x_b),
+\quad
+x_a\in\mathcal D_{\mathrm{train}},
+x_b\in\mathcal D_{\mathrm{test}},
+$$<p>其中 $\operatorname{group}$ 表示骨架、体系、轨迹或其他预先定义的结构组。</p><p>化学知识增强图模型 SEMG-MIGNN 的验证说明了这种区别。该工作同时使用随机拆分和按反应组分留出的 scaffold split，并合成训练集中不存在的 11 种手性磷酸催化剂做外部实验测试；外部测试 RMSE 为 0.127 kcal/mol，最大误差为 0.21 kcal/mol。论文也报告其在一个亚胺 scaffold 外推上略逊于部分基线，因此结论应限定为“化学先验与组分交互有助于建模，并经过结构留出和新实验检验”，而不是“所有任务均最优”。</p><h2 id=代理模型必须回到高保真计算或实验>代理模型必须回到高保真计算或实验</h2><p>晶体缺陷案例提供了一个完整闭环。Yang 和 Buehler 使用分子动力学生成含晶界、孔洞或空位的结构与局部应力标签，再训练图网络预测每个原子的响应。模型保留节点级输出以定位应力集中，同时可聚合得到整体量。论文在 400 个未见多晶石墨烯结构上报告约 5.5% 的节点预测平均归一化相对误差，聚合平均应力与 MD 结果的 $R^2$ 为 0.99。</p><p>代理模型随后与遗传算法结合搜索低应力孔洞排列，但候选设计仍由新的分子动力学模拟复核。这个过程的证据链是</p>$$
+\text{高保真模拟生成标签}
+\longrightarrow
+\text{图代理模型快速筛选}
+\longrightarrow
+\text{独立高保真复核}.
+$$<p>代理模型逼近的是标签生成器在已覆盖区域内的行为，不会凭空获得标签模拟中没有的新物理。若训练标签来自近似势或特定 DFT 设置，模型精度的上限和偏差也受该口径约束。</p><h2 id=五个问题构成模型选型闭环>五个问题构成模型选型闭环</h2><p>面对新的空间科学任务，可以按下列顺序检查：</p><ol><li>基本对象和关系是什么，图是否真的是合适表示？</li><li>任务需要拓扑、距离、角度、方向、周期性还是长程作用？</li><li>输出是标量、极向量、轴向量还是张量，它在相关变换下怎样变化？</li><li>哪些约束应由架构保证，哪些物理仍需通过损失、显式模块或数值求解器加入？</li><li>数据划分、对称测试和下游模拟分别检验什么风险？</li></ol><p><img src=/img/blog/ai4s/07-design-workflow.png alt=从科学问题到空间图模型的五步设计闭环。></p><p>图 2：对象、构图、几何、输出约束与结构外验证共同组成设计流程。图源为本系列配套课件。</p><p>这五个问题把整个系列串回同一条主线。图回答哪些单元可以直接交互，消息传递把可变邻域变成共享计算，距离和角度提供不依赖坐标系的局部几何，等变特征保留方向信息，验证体系则检查这些归纳偏置是否在真实任务中转化为可靠预测。</p><h2 id=参考资料>参考资料</h2><ol><li>Zhang L, et al. <a href=https://doi.org/10.1103/PhysRevLett.120.143001>Deep Potential Molecular Dynamics</a>. Physical Review Letters, 2018.</li><li>Zhang D, et al. <a href=https://doi.org/10.1038/s41524-024-01493-2>DPA-2: A Large Atomic Model as a Multi-Task Learner</a>. npj Computational Materials, 2024.</li><li>Yang Z, Buehler M J. <a href=https://doi.org/10.1038/s41524-022-00879-4>Linking Atomic Structural Defects to Mesoscale Properties</a>. npj Computational Materials, 2022.</li><li>Li S W, et al. <a href=https://doi.org/10.1038/s41467-023-39283-x>Reaction Performance Prediction with an Extrapolative and Interpretable Graph Model Based on Chemical Knowledge</a>. Nature Communications, 2023.</li><li>Fuchs P, et al. <a href=https://doi.org/10.1038/s41524-025-01790-4>Learning Non-Local Molecular Interactions via Equivariant Local Representations and Charge Equilibration</a>. npj Computational Materials, 2025.</li></ol><p><a href=/blog/ai4s-01-scientific-space/>返回系列第 1 篇：为什么科学智能必须看见空间</a> · <a href=/blog/ai4s-06-domain-cases/>上一篇：蛋白质、晶体与网格如何选择模型</a></p><ul class="list-none pl-0 font-sm align-left"><li class=list-none>Tags:
+<a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/ai4s><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+AI4S
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/deep-potential><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Deep Potential
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/dpa-2><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+DPA-2
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/scientific-machine-learning><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Scientific Machine Learning</span></a></li></ul></article><nav class=article-footer-nav><a class="article-nav-link article-nav-link--prev" href=https://SnailZhan.github.io/blog/ai4s-06-domain-cases/><span class=article-nav-link__label>Previous</span>
+<span class=article-nav-link__title>AI4S 空间结构（六）：蛋白质、晶体与网格如何选择模型</span>
+</a><span></span></nav></div></main><footer class="footer container h-10 text-center mt-1"><hr class=my-4><ul class="pl-0 mt-1"><li class="ml-2 first:before:content-none before:content-['•']
+inline-block list-none"><a class="ml-2 text-neutral-800
+dark:text-neutral-400 border-none" href=https://github.com/hugcis/hugo-astatine-theme>Code</a></li><li class="ml-2 first:before:content-none before:content-['•']
+text-neutral-800 dark:text-neutral-400 inline-block list-none"><span class=ml-2>© 2026</span></li></ul></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css integrity=sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/ crossorigin=anonymous><style>.article-body{min-width:0;overflow-x:hidden}.article-body .katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:.25rem 0}@media(max-width:640px){.article-body .katex-display>.katex{text-align:left}}</style><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.js integrity=sha384-97gW6UIJxnlKemYavrqDHSX3SiygeOwIZhwyOKRfSaf0JWKRVj9hLASHgFTzT+0O crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"\\[",right:"\\]",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1}],throwOnError:!1})})</script></body></html>

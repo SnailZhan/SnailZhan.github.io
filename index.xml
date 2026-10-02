@@ -1,2 +1,228 @@
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zhan's Space</title><link>https://SnailZhan.github.io/</link><description>Recent content on Zhan's Space</description><language>en-us</language><atom:link href="https://SnailZhan.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>Blog</title><link>https://SnailZhan.github.io/blog/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://SnailZhan.github.io/blog/</guid><description>&lt;p&gt;Essays, research notes, project updates, and small technical write-ups.&lt;br&gt;
-This is where I collect ideas that are still forming as well as things I have learned along the way.&lt;/p&gt;</description></item></channel></rss>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Zhan's Space</title><link>https://SnailZhan.github.io/</link><description>Recent content on Zhan's Space</description><language>en-us</language><lastBuildDate>Fri, 02 Oct 2026 15:00:00 +0800</lastBuildDate><atom:link href="https://SnailZhan.github.io/index.xml" rel="self" type="application/rss+xml"/><item><title>AI4S 空间结构（七）：从模型预测到可信科学计算</title><link>https://SnailZhan.github.io/blog/ai4s-07-trustworthy-modeling/</link><pubDate>Fri, 02 Oct 2026 15:00:00 +0800</pubDate><guid>https://SnailZhan.github.io/blog/ai4s-07-trustworthy-modeling/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;系列导航：&lt;a href="https://SnailZhan.github.io/blog/ai4s-06-domain-cases/"&gt;上一篇：蛋白质、晶体与网格如何选择模型&lt;/a&gt; · 第 7 篇&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;从科学对象到模型预测，前六篇依次讨论了关系表示、消息传递、三维几何与对称约束。真正用于科学计算时，架构只是工作流的一部分。训练标签来自哪种理论或实验口径，数据如何划分，对称性是否在实现中成立，预测进入模拟后是否稳定，这些问题共同决定模型能否可信使用。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://SnailZhan.github.io/img/blog/ai4s/07-model-families.png" alt="常见空间图模型保留不同层次的几何信息。"&gt;&lt;/p&gt;
+&lt;p&gt;图 1：拓扑、距离/角度、低阶向量和高阶不可约表示形成不同模型家族。它们是信息与成本的取舍，并非单向优劣排名。图源为本系列配套课件。&lt;/p&gt;
+&lt;h2 id="原子间势的学习目标"&gt;原子间势的学习目标&lt;/h2&gt;
+&lt;p&gt;给定原子种类 $\mathbf Z=(Z_1,\ldots,Z_N)$、坐标 $\mathbf R$ 和可选晶格 $\mathbf L$，原子势模型预测总能量&lt;/p&gt;
+$$
+\widehat E_\theta=E_\theta(\mathbf Z,\mathbf R,\mathbf L).
+$$&lt;p&gt;原子力和应力可由能量导数得到：&lt;/p&gt;
+$$
+\widehat{\mathbf F}_i
+=-\frac{\partial\widehat E_\theta}{\partial\mathbf r_i},
+\qquad
+\widehat{\boldsymbol\sigma}
+=\frac{1}{\Omega}
+\frac{\partial\widehat E_\theta}{\partial\boldsymbol\varepsilon},
+$$&lt;p&gt;其中 $\Omega$ 是晶胞体积，$\boldsymbol\varepsilon$ 是应变张量。不同软件对维里和应力的符号、归一化及单位可能采用不同约定，训练前必须统一标签口径。&lt;/p&gt;
+&lt;p&gt;联合损失可写为&lt;/p&gt;
+$$
+\mathcal L
+=\lambda_E\,\ell_E(\widehat E,E)
++\lambda_F\frac1N\sum_{i=1}^{N}
+\left\lVert\widehat{\mathbf F}_i-\mathbf F_i\right\rVert_2^2
++\lambda_\sigma\,
+\ell_\sigma(\widehat{\boldsymbol\sigma},\boldsymbol\sigma).
+$$&lt;p&gt;$\lambda_E,\lambda_F,\lambda_\sigma$ 控制不同监督项的相对尺度。它们不能脱离单位、样本中原子数以及标签噪声直接比较。力标签每个构型提供 $3N$ 个分量，若不恰当归一化，力项可能仅凭数量压过能量项。&lt;/p&gt;
+&lt;h2 id="deep-potential从局部原子能到可扩展模拟"&gt;Deep Potential：从局部原子能到可扩展模拟&lt;/h2&gt;
+&lt;p&gt;Deep Potential 将总能量分解为局部原子贡献：&lt;/p&gt;
+$$
+\widehat E_\theta
+=\sum_{i=1}^{N}
+\mathcal F_\theta\!\left(
+\mathcal D_i(\mathcal N_i)
+\right).
+$$&lt;p&gt;$\mathcal N_i$ 是中心原子 $i$ 在截断半径内的局部环境，$\mathcal D_i$ 是描述器，$\mathcal F_\theta$ 把描述器映射为原子能贡献。所有原子共享同一网络，求和读出保持置换不变和能量广延性；有限邻域让成本在平均邻居数稳定时近似随 $N$ 线性增长。&lt;/p&gt;</description></item><item><title>Blog</title><link>https://SnailZhan.github.io/blog/</link><pubDate>Fri, 02 Oct 2026 15:00:00 +0800</pubDate><guid>https://SnailZhan.github.io/blog/</guid><description>&lt;p&gt;Essays, research notes, project updates, and small technical write-ups.&lt;br&gt;
+This is where I collect ideas that are still forming as well as things I have learned along the way.&lt;/p&gt;</description></item><item><title>AI4S 空间结构（六）：蛋白质、晶体与网格如何选择模型</title><link>https://SnailZhan.github.io/blog/ai4s-06-domain-cases/</link><pubDate>Fri, 02 Oct 2026 14:00:00 +0800</pubDate><guid>https://SnailZhan.github.io/blog/ai4s-06-domain-cases/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;系列导航：&lt;a href="https://SnailZhan.github.io/blog/ai4s-05-equivariant-networks/"&gt;上一篇：从不变性到等变网络&lt;/a&gt; · 第 6 篇 · &lt;a href="https://SnailZhan.github.io/blog/ai4s-07-trustworthy-modeling/"&gt;下一篇：从预测到可信科学计算&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;前几篇从统一数学结构出发，依次建立了图表示、消息传递、三维不变量和等变映射。把这些方法用于真实科学问题时，不能只问“哪个模型更新”，而应先识别对象、关系、输入几何、输出类型和验证尺度。本篇用蛋白质、周期晶体和不规则网格三个案例说明，同一套图学习语言如何产生不同的模型选择。&lt;/p&gt;
+&lt;h2 id="蛋白质序列关系与空间关系并存"&gt;蛋白质：序列关系与空间关系并存&lt;/h2&gt;
+&lt;p&gt;给定已知或候选蛋白质结构，可以把残基表示为节点。节点标量可包含氨基酸类型、二面角编码和序列位置，向量特征可包含主链方向、侧链方向或局部几何轴。边既可表示序列邻接，也可表示三维空间接触。&lt;/p&gt;
+&lt;p&gt;蛋白质图的困难不只是节点数较大。两个序列位置相距很远的残基可能在折叠后相互接触；反过来，序列相邻并不代表它们承担同一种空间作用。只使用序列边会遗漏远程接触，只使用短半径空间边又可能削弱链的连续性。一个常见构造是&lt;/p&gt;
+$$
+E=E_{\text{seq}}\cup E_{\text{spatial}},
+$$&lt;p&gt;并在边特征中记录关系类型与相对序列位置。&lt;/p&gt;
+&lt;h3 id="gvp-如何同时处理标量和向量"&gt;GVP 如何同时处理标量和向量&lt;/h3&gt;
+&lt;p&gt;Geometric Vector Perceptron（GVP）把一个节点状态写成&lt;/p&gt;
+$$
+(\mathbf s,\mathbf V),
+\qquad
+\mathbf s\in\mathbb R^{d_s},\quad
+\mathbf V\in\mathbb R^{d_v\times3}.
+$$&lt;p&gt;$\mathbf s$ 保存旋转不变标量，$\mathbf V$ 的每一行保存一个三维向量。对旋转 $Q\in SO(3)$，约定&lt;/p&gt;
+$$
+\mathbf s^{\prime}=\mathbf s,
+\qquad
+\mathbf V^{\prime}=\mathbf VQ^{\mathsf T}.
+$$&lt;p&gt;一个简化的 GVP 块先只在线性通道维上混合向量&lt;/p&gt;
+$$
+\mathbf V_h=W_h\mathbf V,
+$$&lt;p&gt;再计算每个向量通道的模长&lt;/p&gt;
+$$
+\mathbf n=\left(
+\lVert\mathbf V_{h,1}\rVert_2,\ldots,
+\lVert\mathbf V_{h,d_h}\rVert_2
+\right).
+$$&lt;p&gt;由于 $(\mathbf V_hQ^{\mathsf T})(\mathbf V_hQ^{\mathsf T})^{\mathsf T}=\mathbf V_h\mathbf V_h^{\mathsf T}$，$\mathbf n$ 在旋转下不变。标量通道可由&lt;/p&gt;</description></item><item><title>AI4S 空间结构（五）：从不变性到等变网络</title><link>https://SnailZhan.github.io/blog/ai4s-05-equivariant-networks/</link><pubDate>Fri, 02 Oct 2026 13:00:00 +0800</pubDate><guid>https://SnailZhan.github.io/blog/ai4s-05-equivariant-networks/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;系列导航：&lt;a href="https://SnailZhan.github.io/blog/ai4s-04-invariant-geometry/"&gt;上一篇：距离、角度与不变量&lt;/a&gt; · 第 5 篇 · &lt;a href="https://SnailZhan.github.io/blog/ai4s-06-domain-cases/"&gt;下一篇：蛋白质、晶体与网格&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;不变几何网络先把坐标压缩为距离和角度，再在标量空间中计算。等变网络保留另一类信息：输入旋转时，中间特征和输出也按照确定规律旋转。要严谨讨论这一点，需要先明确“对哪个变换群等变”以及“每类特征采用什么群表示”。&lt;/p&gt;
+&lt;h2 id="四个常见空间群不能混用"&gt;四个常见空间群不能混用&lt;/h2&gt;
+&lt;p&gt;三维正交群定义为&lt;/p&gt;
+$$
+O(3)=\{Q\in\mathbb R^{3\times3}:Q^{\mathsf T}Q=I\}.
+$$&lt;p&gt;$O(3)$ 同时包含行列式为 $+1$ 的旋转与行列式为 $-1$ 的反射或反演。特殊正交群&lt;/p&gt;
+$$
+SO(3)=\{Q\in O(3):\det Q=+1\}
+$$&lt;p&gt;只包含适当旋转。将平移加入后得到&lt;/p&gt;
+$$
+SE(3)=SO(3)\ltimes\mathbb R^3,
+\qquad
+E(3)=O(3)\ltimes\mathbb R^3.
+$$&lt;p&gt;$SE(3)$ 包含旋转和平移，$E(3)$ 还包含反射。论文中笼统的“3D equivariant”可能对应不同群；若任务包含手性或宇称，遗漏这一区别会改变模型能够区分的结构。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://SnailZhan.github.io/img/blog/ai4s/05-symmetry-groups.png" alt="SO(3)、SE(3)、O(3) 与 E(3) 对应不同空间操作。"&gt;&lt;/p&gt;
+&lt;p&gt;图 1：旋转、平移和镜像反射对应不同的群约束。图源为本系列配套课件。&lt;/p&gt;
+&lt;h2 id="等变性的统一定义"&gt;等变性的统一定义&lt;/h2&gt;
+&lt;p&gt;设群 $G$ 作用在输入空间 $\mathcal X$ 上，输入变换记为 $T_g$；群也通过表示 $\rho(g)$ 作用在输出空间 $\mathcal Y$ 上。映射 $f:\mathcal X\to\mathcal Y$ 若满足&lt;/p&gt;
+$$
+f(T_gx)=\rho(g)f(x),
+\qquad \forall g\in G,
+$$&lt;p&gt;就称 $f$ 对 $G$ 等变。若 $\rho(g)=I$，输出不改变，等变条件退化为不变性&lt;/p&gt;
+$$
+f(T_gx)=f(x).
+$$&lt;p&gt;标量采用平凡表示；极向量在 $Q\in O(3)$ 下采用 $\rho(Q)=Q$；二阶张量满足 $\mathbf T^{\prime}=Q\mathbf TQ^{\mathsf T}$。轴向量的反射规律不同：&lt;/p&gt;</description></item><item><title>AI4S 空间结构（四）：距离、角度与不变量</title><link>https://SnailZhan.github.io/blog/ai4s-04-invariant-geometry/</link><pubDate>Fri, 02 Oct 2026 12:00:00 +0800</pubDate><guid>https://SnailZhan.github.io/blog/ai4s-04-invariant-geometry/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;系列导航：&lt;a href="https://SnailZhan.github.io/blog/ai4s-03-message-passing/"&gt;上一篇：消息传递为什么成立&lt;/a&gt; · 第 4 篇 · &lt;a href="https://SnailZhan.github.io/blog/ai4s-05-equivariant-networks/"&gt;下一篇：从不变性到等变性&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;图神经网络解决了大小可变和节点顺序任意的问题，但普通拓扑图仍可能把多个三维构象视为同一个输入。空间模型需要增加几何信息，同时避免把坐标原点和坐标轴方向误当成物理因素。一条直接路线是先把坐标转化为距离、角度等刚体变换不变量，再在标量特征空间中进行消息传递。&lt;/p&gt;
+&lt;h2 id="为什么距离天然不依赖坐标系"&gt;为什么距离天然不依赖坐标系&lt;/h2&gt;
+&lt;p&gt;对节点 $i,j$，定义相对位移和距离&lt;/p&gt;
+$$
+\mathbf r_{ij}=\mathbf r_j-\mathbf r_i,
+\qquad
+d_{ij}=\lVert\mathbf r_{ij}\rVert_2.
+$$&lt;p&gt;空间变换 $\mathbf r_i^{\prime}=Q\mathbf r_i+\mathbf t$ 中，$Q^{\mathsf T}Q=I$。相对位移变为&lt;/p&gt;
+$$
+\mathbf r_{ij}^{\prime}
+=Q\mathbf r_j+\mathbf t-(Q\mathbf r_i+\mathbf t)
+=Q\mathbf r_{ij}.
+$$&lt;p&gt;平移项自动抵消。利用正交矩阵保持内积，可得&lt;/p&gt;
+$$
+d_{ij}^{\prime\,2}
+=(Q\mathbf r_{ij})^{\mathsf T}(Q\mathbf r_{ij})
+=\mathbf r_{ij}^{\mathsf T}Q^{\mathsf T}Q\mathbf r_{ij}
+=d_{ij}^2.
+$$&lt;p&gt;因此距离对平移、旋转和反射都不变。把 $d_{ij}$ 交给普通多层感知机不会破坏这种不变性，因为不变标量经过确定性标量函数后仍是不变标量。&lt;/p&gt;
+&lt;p&gt;距离常先展开到一组径向基。以高斯基为例，第 $k$ 个分量为&lt;/p&gt;
+$$
+e_{ij,k}
+=\exp\!\left[-\gamma(d_{ij}-\mu_k)^2\right]c(d_{ij}),
+\qquad k=1,\ldots,K,
+$$&lt;p&gt;其中 $\mu_k$ 是径向中心，$\gamma$ 控制宽度，$c(d)$ 是平滑截断函数。展开把单个距离映射为多尺度响应，使后续网络更容易表达随距离变化的非线性相互作用。&lt;/p&gt;
+&lt;h2 id="schnet让距离决定消息的滤波器"&gt;SchNet：让距离决定消息的滤波器&lt;/h2&gt;
+&lt;p&gt;SchNet 不把原子坐标离散到规则三维体素，而是在原子图上使用连续滤波卷积。一个简化的交互层可写为&lt;/p&gt;
+$$
+\mathbf m_{ij}^{(\ell)}
+=\mathbf h_j^{(\ell)}\odot
+W^{(\ell)}(d_{ij}),
+$$$$
+\mathbf h_i^{(\ell+1)}
+=\mathbf h_i^{(\ell)}+
+\phi^{(\ell)}\!\left(
+\sum_{j\in\mathcal N(i)}\mathbf m_{ij}^{(\ell)}
+\right).
+$$&lt;p&gt;$\mathbf h_j^{(\ell)}\in\mathbb R^d$ 是邻居特征，$W^{(\ell)}(d_{ij})\in\mathbb R^d$ 是由距离网络生成的逐通道滤波器，$\odot$ 表示 Hadamard 乘积。距离改变时，滤波器连续改变，相当于根据原子间距调节不同特征通道的权重。&lt;/p&gt;</description></item><item><title>AI4S 空间结构（三）：消息传递为什么成立</title><link>https://SnailZhan.github.io/blog/ai4s-03-message-passing/</link><pubDate>Fri, 02 Oct 2026 11:00:00 +0800</pubDate><guid>https://SnailZhan.github.io/blog/ai4s-03-message-passing/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;系列导航：&lt;a href="https://SnailZhan.github.io/blog/ai4s-02-graph-construction/"&gt;上一篇：把科学对象写成图&lt;/a&gt; · 第 3 篇 · &lt;a href="https://SnailZhan.github.io/blog/ai4s-04-invariant-geometry/"&gt;下一篇：距离、角度与不变量&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;一张图只记录节点和关系，不会自动完成学习。真正的计算问题是：每个节点的邻居数量不同，邻居没有天然顺序，图的规模还会随样本变化，怎样用一组共享参数处理所有节点和所有图？消息传递神经网络（message passing neural network, MPNN）给出了一种统一回答。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://SnailZhan.github.io/img/blog/ai4s/03-message-passing.png" alt="消息传递由边消息、无序聚合和节点更新组成。"&gt;&lt;/p&gt;
+&lt;p&gt;图 1：一层消息传递是一次局部相互作用计算，多层堆叠扩大理论感受野。图源为本系列配套课件。&lt;/p&gt;
+&lt;h2 id="一层消息传递的完整定义"&gt;一层消息传递的完整定义&lt;/h2&gt;
+&lt;p&gt;设第 $\ell$ 层中节点 $i$ 的状态为 $\mathbf h_i^{(\ell)}\in\mathbb R^{d_h}$，边 $(i,j)$ 的特征为 $\mathbf e_{ij}\in\mathbb R^{d_e}$，相对几何编码为 $\psi(\mathbf r_{ij})\in\mathbb R^{d_g}$。从节点 $j$ 发送到节点 $i$ 的消息定义为&lt;/p&gt;
+$$
+\mathbf m_{ij}^{(\ell)}=
+\phi_m^{(\ell)}\!\left(
+\mathbf h_i^{(\ell)},
+\mathbf h_j^{(\ell)},
+\mathbf e_{ij},
+\psi(\mathbf r_{ij})
+\right),
+$$&lt;p&gt;其中 $\phi_m^{(\ell)}$ 是在所有边上共享的可学习函数。消息维度记为 $d_m$，因此 $\mathbf m_{ij}^{(\ell)}\in\mathbb R^{d_m}$。&lt;/p&gt;
+&lt;p&gt;节点 $i$ 收到的消息集合没有顺序，需要使用对排列不敏感的聚合算子 $\square$：&lt;/p&gt;
+$$
+\mathbf m_i^{(\ell)}=
+\mathop{\square}_{j\in\mathcal N(i)}
+\mathbf m_{ij}^{(\ell)}.
+$$&lt;p&gt;求和、均值和逐通道最大值都满足交换律。聚合结果与节点原状态共同进入更新函数&lt;/p&gt;
+$$
+\mathbf h_i^{(\ell+1)}=
+\phi_u^{(\ell)}\!\left(
+\mathbf h_i^{(\ell)},
+\mathbf m_i^{(\ell)}
+\right).
+$$&lt;p&gt;残差更新常写成 $\mathbf h_i^{(\ell+1)}=\mathbf h_i^{(\ell)}+\Delta\mathbf h_i^{(\ell)}$，它有助于优化，但不改变置换性质成立的理由。核心仍是两点：边函数共享参数，邻域聚合不依赖输入顺序。&lt;/p&gt;</description></item><item><title>AI4S 空间结构（二）：把科学对象写成图</title><link>https://SnailZhan.github.io/blog/ai4s-02-graph-construction/</link><pubDate>Fri, 02 Oct 2026 10:00:00 +0800</pubDate><guid>https://SnailZhan.github.io/blog/ai4s-02-graph-construction/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;系列导航：&lt;a href="https://SnailZhan.github.io/blog/ai4s-01-scientific-space/"&gt;上一篇：为什么科学智能必须看见空间&lt;/a&gt; · 第 2 篇 · &lt;a href="https://SnailZhan.github.io/blog/ai4s-03-message-passing/"&gt;下一篇：消息传递为什么成立&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;图是一种关系表示，不是某个特定神经网络的名称。把科学对象写成图时，我们已经决定了什么是基本单元、哪些单元可以直接交换信息，以及哪些几何或物理量会交给模型。后续网络只能在这个表示上学习，因此构图本身就是模型假设的一部分。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://SnailZhan.github.io/img/blog/ai4s/02-graph-construction.png" alt="同一组节点可以依据不同科学假设构成不同的图。"&gt;&lt;/p&gt;
+&lt;p&gt;图 1：化学键图、半径图、kNN 图、周期图和动态图表达不同的邻接假设。图源为本系列配套课件。&lt;/p&gt;
+&lt;h2 id="图特征与坐标"&gt;图、特征与坐标&lt;/h2&gt;
+&lt;p&gt;一个带几何信息的属性图可写为&lt;/p&gt;
+$$
+G=(V,E,\mathbf H,\mathbf E_f,\mathbf R).
+$$&lt;p&gt;$V=\{1,\ldots,N\}$ 是节点集；$E\subseteq V\times V$ 是边集；$\mathbf H\in\mathbb R^{N\times d_h}$ 收集节点特征；$\mathbf E_f\in\mathbb R^{|E|\times d_e}$ 收集边特征；$\mathbf R\in\mathbb R^{N\times 3}$ 保存节点坐标。这里用 $\mathbf E_f$ 区分“边特征矩阵”和边集合 $E$。&lt;/p&gt;
+&lt;p&gt;节点的含义取决于分辨率。分子图常以原子为节点，蛋白质可以选择原子、残基或更粗的结构单元，有限元问题可用网格顶点或单元作为节点。分辨率越细，局部几何越完整，节点数和计算成本也越高。粗粒化并非简单删点，它还要求重新定义边与输出。&lt;/p&gt;
+&lt;h2 id="化学键图表达连接不一定表达空间接触"&gt;化学键图：表达连接，不一定表达空间接触&lt;/h2&gt;
+&lt;p&gt;二维分子图通常按照化学键建立邻接矩阵 $\mathbf A$：&lt;/p&gt;
+$$
+A_{ij}=
+\begin{cases}
+1, &amp; \text{原子 }i\text{ 与 }j\text{ 之间存在化学键},\\
+0, &amp; \text{其他情形}.
+\end{cases}
+$$&lt;p&gt;边特征可以包含键级、芳香性、共轭状态或立体标记。这类表示适合官能团识别、二维结构分类和许多分子性质基线，但它没有自动记录非键接触。同一分子折叠后，空间中接近的两个原子可能在键图上相距许多跳；若目标依赖构象、分子内氢键或配体—受体接触，只使用键图会遗漏直接相关的几何关系。&lt;/p&gt;
+&lt;h2 id="半径图让局部空间邻近成为边"&gt;半径图：让局部空间邻近成为边&lt;/h2&gt;
+&lt;p&gt;给定截断半径 $r_c&gt;0$，半径图定义为&lt;/p&gt;
+$$
+E_{r_c}=\left\{(i,j):i\neq j,\ \lVert\mathbf r_j-\mathbf r_i\rVert_2&lt;r_c\right\}.
+$$&lt;p&gt;节点 $i$ 的邻域为&lt;/p&gt;</description></item><item><title>AI4S 空间结构（一）：为什么科学智能必须看见空间</title><link>https://SnailZhan.github.io/blog/ai4s-01-scientific-space/</link><pubDate>Fri, 02 Oct 2026 09:00:00 +0800</pubDate><guid>https://SnailZhan.github.io/blog/ai4s-01-scientific-space/</guid><description>&lt;blockquote&gt;
+&lt;p&gt;本文是“从科学空间到几何深度学习”系列的第 1 篇。系列依次讨论科学问题、图表示、消息传递、三维不变量、等变网络、跨领域案例与可信建模。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;许多科学智能任务都可以写成同一种形式：输入一个由若干组成单元构成的结构，预测它的性质或随时间发生的变化。分子任务可能预测能量、偶极矩或原子受力；蛋白质任务可能评估一个候选结构，也可能预测哪些残基发生相互作用；材料任务关心晶体的形成能、带隙或局部应力；粒子和计算网格任务则希望得到下一时刻的状态。&lt;/p&gt;
+&lt;p&gt;这些对象既不是固定尺寸的向量，也没有统一的线性顺序。一个分子可以有十几个原子，也可以有数千个原子；原子在数据文件中的编号可以任意改变；相同化学键连接还可能对应多个三维构象。科学模型因此要连续回答三个问题：组成单元之间有哪些关系，它们处于怎样的空间几何中，当坐标系或编号改变时，预测应当怎样变化。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://SnailZhan.github.io/img/blog/ai4s/01-same-topology-different-geometry.png" alt="相同组成与连接可以形成不同三维构象。"&gt;&lt;/p&gt;
+&lt;p&gt;图 1：拓扑相同并不意味着三维结构相同。图源为本系列配套课件。&lt;/p&gt;
+&lt;h2 id="从结构到数学对象"&gt;从“结构”到数学对象&lt;/h2&gt;
+&lt;p&gt;设一个系统包含 $N$ 个单元。第 $i$ 个单元的属性记为 $\mathbf a_i$，三维坐标记为 $\mathbf r_i\in\mathbb R^3$。将全部属性和坐标分别堆叠，可得到&lt;/p&gt;
+$$
+\mathbf A=(\mathbf a_1,\ldots,\mathbf a_N),\qquad
+\mathbf R=(\mathbf r_1,\ldots,\mathbf r_N)^{\mathsf T}\in\mathbb R^{N\times 3}.
+$$&lt;p&gt;若系统还包含化学键、空间邻近或网格连接，可用关系集合 $E$ 表示。监督学习要寻找一个带参数的映射&lt;/p&gt;
+$$
+\widehat{\mathbf y}=f_\theta(\mathbf A,\mathbf R,E),
+$$&lt;p&gt;其中 $\theta$ 是模型参数，$\widehat{\mathbf y}$ 可以是整个结构的标量、每个节点的向量，也可以是新的坐标或时间演化状态。这个写法看似普通，却暴露出传统定长模型不易处理的三类结构。&lt;/p&gt;
+&lt;p&gt;节点数 $N$ 随样本变化，意味着输入尺寸并不固定。节点编号只属于文件格式，不属于科学对象。坐标还依赖观察者选择的原点和坐标轴。若模型把节点顺序或坐标轴方向当成真正的信号，就可能在表示同一对象的两份数据上给出不同结果。&lt;/p&gt;
+&lt;h2 id="编号变化不是新样本"&gt;编号变化不是新样本&lt;/h2&gt;
+&lt;p&gt;设 $P\in\{0,1\}^{N\times N}$ 是置换矩阵，每行和每列恰有一个元素为 1。节点重新编号后，属性和坐标变为&lt;/p&gt;
+$$
+\mathbf A^{\prime}=P\mathbf A,\qquad \mathbf R^{\prime}=P\mathbf R.
+$$&lt;p&gt;若输出是分子总能量或晶体带隙，它不应随编号变化：&lt;/p&gt;
+$$
+f_\theta(P\mathbf A,P\mathbf R,PE)=f_\theta(\mathbf A,\mathbf R,E).
+$$&lt;p&gt;这里的 $PE$ 表示边的两个端点也按同一置换重标号。若输出是每个原子的力，输出列表需要与节点一起重排：&lt;/p&gt;</description></item><item><title>ProtSAE 论文解读：让蛋白语言模型里的特征更像生物概念</title><link>https://SnailZhan.github.io/blog/protsae-paper-reading/</link><pubDate>Wed, 29 Apr 2026 00:00:00 +0800</pubDate><guid>https://SnailZhan.github.io/blog/protsae-paper-reading/</guid><description>&lt;p&gt;论文：&lt;a href="https://arxiv.org/abs/2509.05309"&gt;ProtSAE: Disentangling and Interpreting Protein Language Models via Semantically-Guided Sparse Autoencoders&lt;/a&gt;&lt;br&gt;
+作者：Xiangyu Liu, Haodi Lei, Yi Liu, Yang Liu, Wei Hu&lt;br&gt;
+会议：AAAI 2026&lt;br&gt;
+图源：本文插图裁自论文原文 PDF，论文采用 CC BY 4.0 许可。&lt;/p&gt;
+&lt;p&gt;这篇文章想解决的问题很直接：蛋白语言模型已经能在功能预测、结构建模和蛋白设计里发挥作用，但模型内部的表示到底对应了哪些生物学概念，仍然很难讲清楚。&lt;/p&gt;
+&lt;p&gt;稀疏自编码器，也就是 SAE，近年来常被用来解释大语言模型内部表示。它的想法是把一个高维 hidden state 拆成一组更稀疏的 feature，希望每个 feature 能对应某种可解释概念。把这个思路放到 protein language model 上，就很自然地会问：某个 feature 是否对应 binding pocket、transmembrane segment、protein localization、ion binding site 这类生物概念？&lt;/p&gt;
+&lt;p&gt;但普通 SAE 有一个关键问题：一个 neuron 往往不是干净地对应一个概念，而是把多个概念混在一起。论文把这个问题称为 semantic entanglement。ProtSAE 的核心贡献，就是尝试在 SAE 训练过程中引入语义监督和蛋白领域知识，让一部分稀疏特征从一开始就朝着指定生物概念对齐。&lt;/p&gt;
+&lt;h2 id="这篇文章的直觉"&gt;这篇文章的直觉&lt;/h2&gt;
+&lt;p&gt;普通 SAE 的流程大概是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;先在 protein language model 的 hidden representation 上训练 SAE。&lt;/li&gt;
+&lt;li&gt;训练完以后，再拿带注释的数据集去分析哪些 neuron 和哪些概念相关。&lt;/li&gt;
+&lt;li&gt;如果某个 neuron 在含有某个 GO term 的蛋白上经常激活，就说它可能和这个概念相关。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这个流程的问题在于，解释是 post-hoc 的。也就是说，SAE 训练时并不知道我们关心哪些生物概念，它只是在做重构和稀疏化。最后学出来的 feature 可能确实有生物意义，但也可能混合了多个相关或不相关的概念。&lt;/p&gt;</description></item></channel></rss>

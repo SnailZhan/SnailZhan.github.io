@@ -1,0 +1,78 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1"><link rel=canonical href=https://SnailZhan.github.io/blog/ai4s-01-scientific-space/><title>AI4S 空间结构（一）：为什么科学智能必须看见空间 - Zhan's Space</title><meta property="og:title" content="AI4S 空间结构（一）：为什么科学智能必须看见空间 - Zhan's Space"><meta property="og:site_name" content="Zhan's Space"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:published_time" content="2026-10-02T09:00:00+08:00"><meta property="article:modified_time" content="2026-10-02T09:00:00+08:00"><meta property="article:tag" content="AI4S"><meta property="article:tag" content="Geometric Deep Learning"><meta property="article:tag" content="Graph Neural Network"><meta property="article:tag" content="Tutorial"><meta property="article:author" content><meta property="og:image" content="https://SnailZhan.github.io/img/avatar.jpg"><meta property="og:image:width" content="400"><meta property="og:image:height" content="400"><meta property="og:image:alt" content="AI4S 空间结构（一）：为什么科学智能必须看见空间"><meta property="og:url" content="https://SnailZhan.github.io/blog/ai4s-01-scientific-space/"><meta property="og:description" content="从分子、蛋白质、晶体和计算网格出发，建立图表示、三维几何与对称约束这条连续建模主线。"><meta name=Description property="description" content="从分子、蛋白质、晶体和计算网格出发，建立图表示、三维几何与对称约束这条连续建模主线。"><meta name=keywords content="ai4s,geometric deep learning,graph neural network,tutorial"><link rel=stylesheet href=https://SnailZhan.github.io/css/style.min.css><link rel=icon type=image/svg+xml href=/favicon.svg><link rel="shortcut icon" href=/favicon.svg><link rel=manifest href=/site.webmanifest><link href=https://SnailZhan.github.io/index.xml type=application/atom+xml rel=alternate title="Sitewide Atom feed"><meta name=theme-color content="#f5f5f5" media="(prefers-color-scheme: light)"><meta name=theme-color content="#27272a" media="(prefers-color-scheme: dark)"><script>function updateMode(){localStorage.theme==="dark"||!("theme"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function toggleMode(){localStorage.theme==="dark"?localStorage.theme="light":localStorage.theme="dark",updateMode()}window.onload=updateMode();function toggleMenu(){let e=document.getElementById("navbar-default");e.classList.contains("hidden")?e.classList.remove("hidden"):e.classList.add("hidden")}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/SnailZhan.github.io\/blog\/ai4s-01-scientific-space\/"},"headline":"AI4S 空间结构（一）：为什么科学智能必须看见空间","description":"从分子、蛋白质、晶体和计算网格出发，建立图表示、三维几何与对称约束这条连续建模主线。","datePublished":"2026-10-02T09:00:00\u002b08:00","dateModified":"2026-10-02T09:00:00\u002b08:00","author":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"publisher":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"wordCount":202,"keywords":["AI4S","Geometric Deep Learning","Graph Neural Network","Tutorial"]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/SnailZhan.github.io\/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https:\/\/SnailZhan.github.io\/blog\/"},{"@type":"ListItem","position":3,"name":"AI4S 空间结构（一）：为什么科学智能必须看见空间","item":"https:\/\/SnailZhan.github.io\/blog\/ai4s-01-scientific-space\/"}]}</script></head><body><header class="md:px-0 px-2"><nav><div class="container flex flex-wrap justify-between items-center mx-auto"><div class="nav-main my-2.5"><a href=https://SnailZhan.github.io/ class="nav-title py-2.5 text-2xl
+text-zinc-600 dark:text-zinc-300 hover:border-b-0">Zhan's Space</a></div><button type=button onclick=toggleMenu() class="inline-flex items-center p-2 ml-3
+text-sm text-gray-500
+rounded-lg md:hidden hover:bg-gray-100
+focus:outline-none focus:ring-2
+focus:ring-gray-200 dark:text-gray-400
+dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls=navbar-default aria-expanded=false>
+<span class=sr-only>Open main menu</span>
+<svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4A1 1 0 013 5zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg></button><div class="hidden w-full md:block md:w-auto" id=navbar-default><ul class="grid md:grid-flow-col items-center justify-between text-lg
+my-2.5 grid-cols-1 pl-0 text-center"><li class="p-2.5 md:first:pl-0 md:border-none border-b dark:border-zinc-500 list-none"><a class="text-zinc-600 dark:text-zinc-300
+hover:border-b-0 transition-colors duration-150" href=/blog/>Blog</a></li><li class="h-7 pl-2.5 pr-0 list-none"><button type=button onclick=toggleMode() class=h-full aria-label="Toggle between dark and light mode">
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 hidden dark:inline" id=ligh-mode-button-img alt="A sun icon for switching to light mode" src=https://SnailZhan.github.io/img/light_mode.svg>
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 inline dark:hidden" id=dark-mode-button-img alt="A moon icon for switching to dark mode" src=https://SnailZhan.github.io/img/dark_mode.svg></button></li></ul></div></div></nav></header><main class="content h-card container mt-2 m-auto
+leading-loose md:px-0 px-2 z-0" role=main><div class=article-page><nav class=article-back><a href=https://SnailZhan.github.io/blog/ class=article-back__link><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+All posts</a></nav><header class=article-hero><div class=article-hero__meta><span class=article-hero__eyebrow>Blog Post</span>
+<time class=article-hero__date datetime=2026-10-02T09:00:00+0800 itemprop=datePublished>October 2, 2026
+</time><span class=article-hero__reading-time>9 min read</span></div><h1 class=article-hero__title itemprop=name>AI4S 空间结构（一）：为什么科学智能必须看见空间</h1><p class=article-hero__headline itemprop=headline>同一种组成和连接可以对应不同空间构型，而不同构型往往意味着不同性质。</p><ul class=article-hero__tags aria-label=Tags><li class=article-hero__tag>AI4S</li><li class=article-hero__tag>Geometric Deep Learning</li><li class=article-hero__tag>Graph Neural Network</li><li class=article-hero__tag>Tutorial</li></ul></header><article class="article-body e-content h-entry" itemprop=mainEntity itemscope itemtype=http://schema.org/BlogPosting><meta itemprop=author content="Yuxuan Zhan"><blockquote><p>本文是“从科学空间到几何深度学习”系列的第 1 篇。系列依次讨论科学问题、图表示、消息传递、三维不变量、等变网络、跨领域案例与可信建模。</p></blockquote><p>许多科学智能任务都可以写成同一种形式：输入一个由若干组成单元构成的结构，预测它的性质或随时间发生的变化。分子任务可能预测能量、偶极矩或原子受力；蛋白质任务可能评估一个候选结构，也可能预测哪些残基发生相互作用；材料任务关心晶体的形成能、带隙或局部应力；粒子和计算网格任务则希望得到下一时刻的状态。</p><p>这些对象既不是固定尺寸的向量，也没有统一的线性顺序。一个分子可以有十几个原子，也可以有数千个原子；原子在数据文件中的编号可以任意改变；相同化学键连接还可能对应多个三维构象。科学模型因此要连续回答三个问题：组成单元之间有哪些关系，它们处于怎样的空间几何中，当坐标系或编号改变时，预测应当怎样变化。</p><p><img src=/img/blog/ai4s/01-same-topology-different-geometry.png alt=相同组成与连接可以形成不同三维构象。></p><p>图 1：拓扑相同并不意味着三维结构相同。图源为本系列配套课件。</p><h2 id=从结构到数学对象>从“结构”到数学对象</h2><p>设一个系统包含 $N$ 个单元。第 $i$ 个单元的属性记为 $\mathbf a_i$，三维坐标记为 $\mathbf r_i\in\mathbb R^3$。将全部属性和坐标分别堆叠，可得到</p>$$
+\mathbf A=(\mathbf a_1,\ldots,\mathbf a_N),\qquad
+\mathbf R=(\mathbf r_1,\ldots,\mathbf r_N)^{\mathsf T}\in\mathbb R^{N\times 3}.
+$$<p>若系统还包含化学键、空间邻近或网格连接，可用关系集合 $E$ 表示。监督学习要寻找一个带参数的映射</p>$$
+\widehat{\mathbf y}=f_\theta(\mathbf A,\mathbf R,E),
+$$<p>其中 $\theta$ 是模型参数，$\widehat{\mathbf y}$ 可以是整个结构的标量、每个节点的向量，也可以是新的坐标或时间演化状态。这个写法看似普通，却暴露出传统定长模型不易处理的三类结构。</p><p>节点数 $N$ 随样本变化，意味着输入尺寸并不固定。节点编号只属于文件格式，不属于科学对象。坐标还依赖观察者选择的原点和坐标轴。若模型把节点顺序或坐标轴方向当成真正的信号，就可能在表示同一对象的两份数据上给出不同结果。</p><h2 id=编号变化不是新样本>编号变化不是新样本</h2><p>设 $P\in\{0,1\}^{N\times N}$ 是置换矩阵，每行和每列恰有一个元素为 1。节点重新编号后，属性和坐标变为</p>$$
+\mathbf A^{\prime}=P\mathbf A,\qquad \mathbf R^{\prime}=P\mathbf R.
+$$<p>若输出是分子总能量或晶体带隙，它不应随编号变化：</p>$$
+f_\theta(P\mathbf A,P\mathbf R,PE)=f_\theta(\mathbf A,\mathbf R,E).
+$$<p>这里的 $PE$ 表示边的两个端点也按同一置换重标号。若输出是每个原子的力，输出列表需要与节点一起重排：</p>$$
+F_\theta(P\mathbf A,P\mathbf R,PE)=P F_\theta(\mathbf A,\mathbf R,E).
+$$<p>前一种性质称为对置换不变，后一种称为对置换等变。图神经网络采用共享的局部函数和与顺序无关的聚合，正是为了把这种要求写进计算过程，而不是依靠模型从大量重排样本中自行猜出规律。</p><h2 id=空间几何携带了拓扑之外的信息>空间几何携带了拓扑之外的信息</h2><p>只记录“谁与谁相连”仍然无法区分很多科学结构。两个构象可以拥有相同的原子类型和化学键，却有不同键长、键角、二面角与非键接触。晶体中相同化学式也可能形成不同多晶型。蛋白质序列相邻的残基在三维空间里未必接近，序列上相距很远的残基反而可能构成结合口袋。</p><p>相对位移</p>$$
+\mathbf r_{ij}=\mathbf r_j-\mathbf r_i
+$$<p>描述节点 $j$ 相对于节点 $i$ 的方向和距离。其模长</p>$$
+d_{ij}=\lVert\mathbf r_{ij}\rVert_2
+$$<p>保留二体尺度，却丢弃方向。三个节点 $k,j,i$ 形成的夹角可写为</p><h1 id=costheta_kji>$$
+\cos\theta_{kji}</h1><p>\frac{\mathbf r_{jk}^{\mathsf T}\mathbf r_{ji}}
+{\lVert\mathbf r_{jk}\rVert_2,\lVert\mathbf r_{ji}\rVert_2}.
+$$</p><p>距离、角度、二面角和方向特征保留的信息不同，也对应不同的计算成本。模型是否需要这些几何量，取决于目标性质对空间构型是否敏感，而不是取决于对象是否被称为“分子”或“材料”。</p><h2 id=坐标变了物理量应怎样变化>坐标变了，物理量应怎样变化</h2><p>三维刚体变换可统一写为</p>$$
+\mathbf r_i^{\prime}=Q\mathbf r_i+\mathbf t,
+\qquad Q^{\mathsf T}Q=I,
+$$<p>其中 $Q\in O(3)$ 是正交矩阵，$\mathbf t\in\mathbb R^3$ 是平移向量。若 $\det Q=+1$，$Q$ 表示旋转；若 $\det Q=-1$，其中还包含反射或反演。</p><p>不同输出具有不同变换规律。能量 $E$ 是标量，刚体变换后应满足</p>$$
+E(\mathbf RQ^{\mathsf T}+\mathbf 1\mathbf t^{\mathsf T})=E(\mathbf R).
+$$<p>原子力 $\mathbf F_i$ 是极向量，坐标旋转后应满足</p>$$
+\mathbf F_i^{\prime}=Q\mathbf F_i.
+$$<p>二阶应力张量 $\boldsymbol\sigma$ 的变换规律则是</p>$$
+\boldsymbol\sigma^{\prime}=Q\boldsymbol\sigma Q^{\mathsf T}.
+$$<p>“不变”意味着输出数值不随变换改变，“等变”意味着输出按照确定的表示同步变化。两者并不是谁比谁更高级，而是由预测量的物理类型决定。能量需要不变，力需要等变；若把两者的约束互换，模型即使测试误差很小，也可能违背任务本身的定义。</p><h2 id=对称性约束能解决什么>对称性约束能解决什么</h2><p>将置换、平移和旋转规律写入架构，相当于告诉模型：某些输入差异只来自表示方式，而不是新的科学现象。这种归纳偏置能减少重复学习等价样本的负担，在量子化学或实验标签昂贵时尤其有价值。</p><p>对称性并不自动补足缺失的物理。一个严格旋转等变的局部网络仍可能看不到截断半径之外的静电作用，也可能在训练数据未覆盖的新元素或新相态上失败。网络满足等变性，也不等于它自动守恒、长期积分稳定或因果正确。后面的文章会把这些要求拆开讨论。</p><p>本系列沿着一条连续路线展开：先将科学对象表示为图，再推导消息传递如何保证置换性质；随后加入距离和角度，解释不变几何网络；当任务需要方向输出时，再把群作用和等变特征写进网络。</p><h2 id=参考资料>参考资料</h2><ol><li>Gilmer J, et al. <a href=https://proceedings.mlr.press/v70/gilmer17a.html>Neural Message Passing for Quantum Chemistry</a>. ICML, 2017.</li><li>Schütt K, et al. <a href=https://papers.nips.cc/paper_files/paper/2017/hash/303ed4c69846ab36c2904d3ba8573050-Abstract.html>SchNet: A Continuous-Filter Convolutional Neural Network for Modeling Quantum Interactions</a>. NeurIPS, 2017.</li><li>Satorras V G, et al. <a href=https://proceedings.mlr.press/v139/satorras21a.html>E(n) Equivariant Graph Neural Networks</a>. ICML, 2021.</li></ol><p>下一篇：<a href=/blog/ai4s-02-graph-construction/>把科学对象写成图：每一条边都是科学假设</a></p><ul class="list-none pl-0 font-sm align-left"><li class=list-none>Tags:
+<a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/ai4s><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+AI4S
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/geometric-deep-learning><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Geometric Deep Learning
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/graph-neural-network><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Graph Neural Network
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/tutorial><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Tutorial</span></a></li></ul></article><nav class=article-footer-nav><a class="article-nav-link article-nav-link--prev" href=https://SnailZhan.github.io/blog/protsae-paper-reading/><span class=article-nav-link__label>Previous</span>
+<span class=article-nav-link__title>ProtSAE 论文解读：让蛋白语言模型里的特征更像生物概念</span>
+</a><a class="article-nav-link article-nav-link--next" href=https://SnailZhan.github.io/blog/ai4s-02-graph-construction/><span class=article-nav-link__label>Next</span>
+<span class=article-nav-link__title>AI4S 空间结构（二）：把科学对象写成图</span></a></nav></div></main><footer class="footer container h-10 text-center mt-1"><hr class=my-4><ul class="pl-0 mt-1"><li class="ml-2 first:before:content-none before:content-['•']
+inline-block list-none"><a class="ml-2 text-neutral-800
+dark:text-neutral-400 border-none" href=https://github.com/hugcis/hugo-astatine-theme>Code</a></li><li class="ml-2 first:before:content-none before:content-['•']
+text-neutral-800 dark:text-neutral-400 inline-block list-none"><span class=ml-2>© 2026</span></li></ul></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css integrity=sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/ crossorigin=anonymous><style>.article-body{min-width:0;overflow-x:hidden}.article-body .katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:.25rem 0}@media(max-width:640px){.article-body .katex-display>.katex{text-align:left}}</style><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.js integrity=sha384-97gW6UIJxnlKemYavrqDHSX3SiygeOwIZhwyOKRfSaf0JWKRVj9hLASHgFTzT+0O crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"\\[",right:"\\]",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1}],throwOnError:!1})})</script></body></html>

@@ -1,0 +1,103 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1"><link rel=canonical href=https://SnailZhan.github.io/blog/ai4s-03-message-passing/><title>AI4S 空间结构（三）：消息传递为什么成立 - Zhan's Space</title><meta property="og:title" content="AI4S 空间结构（三）：消息传递为什么成立 - Zhan's Space"><meta property="og:site_name" content="Zhan's Space"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:published_time" content="2026-10-02T11:00:00+08:00"><meta property="article:modified_time" content="2026-10-02T11:00:00+08:00"><meta property="article:tag" content="AI4S"><meta property="article:tag" content="Graph Neural Network"><meta property="article:tag" content="Message Passing"><meta property="article:tag" content="Tutorial"><meta property="article:author" content><meta property="og:image" content="https://SnailZhan.github.io/img/avatar.jpg"><meta property="og:image:width" content="400"><meta property="og:image:height" content="400"><meta property="og:image:alt" content="AI4S 空间结构（三）：消息传递为什么成立"><meta property="og:url" content="https://SnailZhan.github.io/blog/ai4s-03-message-passing/"><meta property="og:description" content="从共享局部函数、无序聚合和任务读出推导 MPNN，并证明其节点置换等变性。"><meta name=Description property="description" content="从共享局部函数、无序聚合和任务读出推导 MPNN，并证明其节点置换等变性。"><meta name=keywords content="ai4s,graph neural network,message passing,tutorial"><link rel=stylesheet href=https://SnailZhan.github.io/css/style.min.css><link rel=icon type=image/svg+xml href=/favicon.svg><link rel="shortcut icon" href=/favicon.svg><link rel=manifest href=/site.webmanifest><link href=https://SnailZhan.github.io/index.xml type=application/atom+xml rel=alternate title="Sitewide Atom feed"><meta name=theme-color content="#f5f5f5" media="(prefers-color-scheme: light)"><meta name=theme-color content="#27272a" media="(prefers-color-scheme: dark)"><script>function updateMode(){localStorage.theme==="dark"||!("theme"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function toggleMode(){localStorage.theme==="dark"?localStorage.theme="light":localStorage.theme="dark",updateMode()}window.onload=updateMode();function toggleMenu(){let e=document.getElementById("navbar-default");e.classList.contains("hidden")?e.classList.remove("hidden"):e.classList.add("hidden")}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/SnailZhan.github.io\/blog\/ai4s-03-message-passing\/"},"headline":"AI4S 空间结构（三）：消息传递为什么成立","description":"从共享局部函数、无序聚合和任务读出推导 MPNN，并证明其节点置换等变性。","datePublished":"2026-10-02T11:00:00\u002b08:00","dateModified":"2026-10-02T11:00:00\u002b08:00","author":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"publisher":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"wordCount":292,"keywords":["AI4S","Graph Neural Network","Message Passing","Tutorial"]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/SnailZhan.github.io\/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https:\/\/SnailZhan.github.io\/blog\/"},{"@type":"ListItem","position":3,"name":"AI4S 空间结构（三）：消息传递为什么成立","item":"https:\/\/SnailZhan.github.io\/blog\/ai4s-03-message-passing\/"}]}</script></head><body><header class="md:px-0 px-2"><nav><div class="container flex flex-wrap justify-between items-center mx-auto"><div class="nav-main my-2.5"><a href=https://SnailZhan.github.io/ class="nav-title py-2.5 text-2xl
+text-zinc-600 dark:text-zinc-300 hover:border-b-0">Zhan's Space</a></div><button type=button onclick=toggleMenu() class="inline-flex items-center p-2 ml-3
+text-sm text-gray-500
+rounded-lg md:hidden hover:bg-gray-100
+focus:outline-none focus:ring-2
+focus:ring-gray-200 dark:text-gray-400
+dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls=navbar-default aria-expanded=false>
+<span class=sr-only>Open main menu</span>
+<svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4A1 1 0 013 5zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg></button><div class="hidden w-full md:block md:w-auto" id=navbar-default><ul class="grid md:grid-flow-col items-center justify-between text-lg
+my-2.5 grid-cols-1 pl-0 text-center"><li class="p-2.5 md:first:pl-0 md:border-none border-b dark:border-zinc-500 list-none"><a class="text-zinc-600 dark:text-zinc-300
+hover:border-b-0 transition-colors duration-150" href=/blog/>Blog</a></li><li class="h-7 pl-2.5 pr-0 list-none"><button type=button onclick=toggleMode() class=h-full aria-label="Toggle between dark and light mode">
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 hidden dark:inline" id=ligh-mode-button-img alt="A sun icon for switching to light mode" src=https://SnailZhan.github.io/img/light_mode.svg>
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 inline dark:hidden" id=dark-mode-button-img alt="A moon icon for switching to dark mode" src=https://SnailZhan.github.io/img/dark_mode.svg></button></li></ul></div></div></nav></header><main class="content h-card container mt-2 m-auto
+leading-loose md:px-0 px-2 z-0" role=main><div class=article-page><nav class=article-back><a href=https://SnailZhan.github.io/blog/ class=article-back__link><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+All posts</a></nav><header class=article-hero><div class=article-hero__meta><span class=article-hero__eyebrow>Blog Post</span>
+<time class=article-hero__date datetime=2026-10-02T11:00:00+0800 itemprop=datePublished>October 2, 2026
+</time><span class=article-hero__reading-time>9 min read</span></div><h1 class=article-hero__title itemprop=name>AI4S 空间结构（三）：消息传递为什么成立</h1><p class=article-hero__headline itemprop=headline>图只规定关系，消息传递才把大小可变、顺序任意的邻域变成可学习计算。</p><ul class=article-hero__tags aria-label=Tags><li class=article-hero__tag>AI4S</li><li class=article-hero__tag>Graph Neural Network</li><li class=article-hero__tag>Message Passing</li><li class=article-hero__tag>Tutorial</li></ul></header><article class="article-body e-content h-entry" itemprop=mainEntity itemscope itemtype=http://schema.org/BlogPosting><meta itemprop=author content="Yuxuan Zhan"><blockquote><p>系列导航：<a href=/blog/ai4s-02-graph-construction/>上一篇：把科学对象写成图</a> · 第 3 篇 · <a href=/blog/ai4s-04-invariant-geometry/>下一篇：距离、角度与不变量</a></p></blockquote><p>一张图只记录节点和关系，不会自动完成学习。真正的计算问题是：每个节点的邻居数量不同，邻居没有天然顺序，图的规模还会随样本变化，怎样用一组共享参数处理所有节点和所有图？消息传递神经网络（message passing neural network, MPNN）给出了一种统一回答。</p><p><img src=/img/blog/ai4s/03-message-passing.png alt=消息传递由边消息、无序聚合和节点更新组成。></p><p>图 1：一层消息传递是一次局部相互作用计算，多层堆叠扩大理论感受野。图源为本系列配套课件。</p><h2 id=一层消息传递的完整定义>一层消息传递的完整定义</h2><p>设第 $\ell$ 层中节点 $i$ 的状态为 $\mathbf h_i^{(\ell)}\in\mathbb R^{d_h}$，边 $(i,j)$ 的特征为 $\mathbf e_{ij}\in\mathbb R^{d_e}$，相对几何编码为 $\psi(\mathbf r_{ij})\in\mathbb R^{d_g}$。从节点 $j$ 发送到节点 $i$ 的消息定义为</p>$$
+\mathbf m_{ij}^{(\ell)}=
+\phi_m^{(\ell)}\!\left(
+\mathbf h_i^{(\ell)},
+\mathbf h_j^{(\ell)},
+\mathbf e_{ij},
+\psi(\mathbf r_{ij})
+\right),
+$$<p>其中 $\phi_m^{(\ell)}$ 是在所有边上共享的可学习函数。消息维度记为 $d_m$，因此 $\mathbf m_{ij}^{(\ell)}\in\mathbb R^{d_m}$。</p><p>节点 $i$ 收到的消息集合没有顺序，需要使用对排列不敏感的聚合算子 $\square$：</p>$$
+\mathbf m_i^{(\ell)}=
+\mathop{\square}_{j\in\mathcal N(i)}
+\mathbf m_{ij}^{(\ell)}.
+$$<p>求和、均值和逐通道最大值都满足交换律。聚合结果与节点原状态共同进入更新函数</p>$$
+\mathbf h_i^{(\ell+1)}=
+\phi_u^{(\ell)}\!\left(
+\mathbf h_i^{(\ell)},
+\mathbf m_i^{(\ell)}
+\right).
+$$<p>残差更新常写成 $\mathbf h_i^{(\ell+1)}=\mathbf h_i^{(\ell)}+\Delta\mathbf h_i^{(\ell)}$，它有助于优化，但不改变置换性质成立的理由。核心仍是两点：边函数共享参数，邻域聚合不依赖输入顺序。</p><h2 id=为什么它对节点置换等变>为什么它对节点置换等变</h2><p>设 $\pi$ 是节点集合上的任意置换，$P$ 是对应置换矩阵。重新编号后，节点 $i$ 变为 $\pi(i)$，邻域也同步变为</p>$$
+\mathcal N^{\prime}(\pi(i))=\{\pi(j):j\in\mathcal N(i)\}.
+$$<p>因为所有边使用同一个 $\phi_m^{(\ell)}$，重标号后的消息满足</p><h1 id=mathbf-m_piipijprimeell>$$
+\mathbf m_{\pi(i)\pi(j)}^{\prime(\ell)}</h1><p>\phi_m^{(\ell)}!\left(
+\mathbf h_i^{(\ell)},
+\mathbf h_j^{(\ell)},
+\mathbf e_{ij},
+\psi(\mathbf r_{ij})
+\right)
+=\mathbf m_{ij}^{(\ell)}.
+$$</p><p>聚合算子不依赖元素顺序，因此</p><h1 id=mathbf-m_piiprimeell>$$
+\mathbf m_{\pi(i)}^{\prime(\ell)}</h1><h1 id=mathopsquarepijinmathcal-nprimepipiipijprimeell>\mathop{\square}<em>{\pi(j)\in\mathcal N^{\prime}(\pi(i))}
+\mathbf m</em>{\pi(i)\pi(j)}^{\prime(\ell)}</h1><p>\mathop{\square}<em>{j\in\mathcal N(i)}
+\mathbf m</em>{ij}^{(\ell)}
+=\mathbf m_i^{(\ell)}.
+$$</p><p>共享的更新函数进一步给出</p>$$
+\mathbf h_{\pi(i)}^{\prime(\ell+1)}=\mathbf h_i^{(\ell+1)}.
+$$<p>将全部节点状态写成矩阵 $\mathbf H^{(\ell)}$，上述关系就是</p>$$
+F(P\mathbf H^{(\ell)},P\mathbf A P^{\mathsf T})
+=P F(\mathbf H^{(\ell)},\mathbf A).
+$$<p>这证明了一层消息传递对节点置换等变。多层网络是等变映射的复合，所以仍然等变。若实现中按节点编号选择特殊邻居、在边函数中使用未同步重排的位置索引，或把全部节点向量按固定顺序拼接，这个证明的前提就会失效。</p><h2 id=聚合方式表达了不同物理假设>聚合方式表达了不同物理假设</h2><p>求和聚合</p>$$
+\mathbf m_i=\sum_{j\in\mathcal N(i)}\mathbf m_{ij}
+$$<p>保留邻居数和累积贡献，适合近似可加相互作用。均值聚合</p>$$
+\mathbf m_i=\frac{1}{|\mathcal N(i)|}
+\sum_{j\in\mathcal N(i)}\mathbf m_{ij}
+$$<p>减弱了不同节点度数带来的尺度差异，却会消去“两个相同贡献”和“一个相同贡献”的数量区别。最大聚合只保留每个通道的最大响应，适合检测显著局部模式，不适合需要累积弱相互作用的目标。</p><p>聚合算子不会仅凭形式告诉我们哪一种最好。能量、质量等广延量随独立子系统规模相加，求和通常更自然；密度、平均局部环境等强度量不随系统简单复制而翻倍，可能需要归一化读出。物理量的尺度规律应与网络的聚合和读出一起设计。</p><h2 id=从节点表示到任务输出>从节点表示到任务输出</h2><p>经过 $L$ 层后，节点 $i$ 的状态 $\mathbf h_i^{(L)}$ 包含其 $L$ 跳邻域内经过压缩的信息。节点级任务可直接预测</p>$$
+\widehat{\mathbf y}_i=\phi_{\text{node}}(\mathbf h_i^{(L)}).
+$$<p>边级任务联合两个端点与边表示：</p>$$
+\widehat{\mathbf y}_{ij}=\phi_{\text{edge}}
+\left(\mathbf h_i^{(L)},\mathbf h_j^{(L)},\mathbf e_{ij}\right).
+$$<p>整图任务需要置换不变读出 $R$：</p>$$
+\widehat{\mathbf y}=R\left(\{\mathbf h_i^{(L)}:i\in V\}\right).
+$$<p>原子势经常先预测原子能 $\widehat E_i$，再取</p>$$
+\widehat E=\sum_{i=1}^{N}\widehat E_i.
+$$<p>这样既保持置换不变，也让两个互不相互作用的系统副本具有相加能量。这里的 $\widehat E_i$ 是一种可学习分解，不意味着每个“原子能”都有唯一的实验定义。</p><h2 id=多层传播扩大了范围也带来瓶颈>多层传播扩大了范围，也带来瓶颈</h2><p>一层消息传递通常覆盖一跳邻域，$L$ 层的理论感受野可扩展到 $L$ 跳。理论可达并不代表远程信息能够无损到达。远处节点数量可能随跳数快速增长，而所有信息必须压缩进固定维度的 $\mathbf h_i^{(L)}$，由此形成 over-squashing。加深网络还可能让不同节点表示逐渐相似，出现 over-smoothing。</p><p>这两个问题与缺失长程物理需要区分。Over-squashing 是图通信容量不足；截断半径之外的静电或色散作用未进入模型，则属于建模范围不完整。增加层数可能扩大图上的感受野，却不等于正确实现电荷平衡、Ewald 求和或其他长程物理。</p><p>若每层对每条边计算一次宽度为 $d$ 的消息，忽略具体矩阵乘法常数后，标量 MPNN 的主要成本大致随 $L|E|d^2$ 增长。增大截断半径会提高 $|E|$，加深网络提高 $L$，扩大通道提高 $d$。这些选择共同决定计算量，不能把其中任何一个当成免费的表达能力提升。</p><h2 id=一个节点级案例缺陷材料中的局部应力>一个节点级案例：缺陷材料中的局部应力</h2><p>含空位、孔洞或晶界的材料会产生空间不均匀的局部应力。若只做整图池化，模型可以预测平均应力，却无法指出应力集中发生在哪里。Yang 和 Buehler 将含缺陷的原子结构写成图，用节点级输出预测每个原子的 von Mises 应力、拉伸应力或势能，再把节点结果汇总为整体量。</p><p>这个案例说明读出层级必须与科学问题一致。局部场预测应保留节点索引，整体材料性质才使用不变读出。原工作把笛卡尔坐标作为节点特征，并未从架构上保证 $E(3)$ 等变，因此它也是一个自然的追问：当结构整体旋转时，网络究竟依靠数据增强近似学习规律，还是应把空间约束显式写入网络？</p><h2 id=参考资料>参考资料</h2><ol><li>Gilmer J, et al. <a href=https://proceedings.mlr.press/v70/gilmer17a.html>Neural Message Passing for Quantum Chemistry</a>. ICML, 2017.</li><li>Alon U, Yahav E. <a href=https://mlanthology.org/iclr/2021/alon2021iclr-bottleneck/>On the Bottleneck of Graph Neural Networks and Its Practical Implications</a>. ICLR, 2021.</li><li>Yang Z, Buehler M J. <a href=https://doi.org/10.1038/s41524-022-00879-4>Linking Atomic Structural Defects to Mesoscale Properties in Crystalline Solids Using Graph Neural Networks</a>. npj Computational Materials, 2022.</li></ol><p><a href=/blog/ai4s-02-graph-construction/>上一篇：把科学对象写成图</a> · <a href=/blog/ai4s-04-invariant-geometry/>下一篇：从拓扑走向三维几何</a></p><ul class="list-none pl-0 font-sm align-left"><li class=list-none>Tags:
+<a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/ai4s><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+AI4S
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/graph-neural-network><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Graph Neural Network
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/message-passing><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Message Passing
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/tutorial><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Tutorial</span></a></li></ul></article><nav class=article-footer-nav><a class="article-nav-link article-nav-link--prev" href=https://SnailZhan.github.io/blog/ai4s-02-graph-construction/><span class=article-nav-link__label>Previous</span>
+<span class=article-nav-link__title>AI4S 空间结构（二）：把科学对象写成图</span>
+</a><a class="article-nav-link article-nav-link--next" href=https://SnailZhan.github.io/blog/ai4s-04-invariant-geometry/><span class=article-nav-link__label>Next</span>
+<span class=article-nav-link__title>AI4S 空间结构（四）：距离、角度与不变量</span></a></nav></div></main><footer class="footer container h-10 text-center mt-1"><hr class=my-4><ul class="pl-0 mt-1"><li class="ml-2 first:before:content-none before:content-['•']
+inline-block list-none"><a class="ml-2 text-neutral-800
+dark:text-neutral-400 border-none" href=https://github.com/hugcis/hugo-astatine-theme>Code</a></li><li class="ml-2 first:before:content-none before:content-['•']
+text-neutral-800 dark:text-neutral-400 inline-block list-none"><span class=ml-2>© 2026</span></li></ul></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css integrity=sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/ crossorigin=anonymous><style>.article-body{min-width:0;overflow-x:hidden}.article-body .katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:.25rem 0}@media(max-width:640px){.article-body .katex-display>.katex{text-align:left}}</style><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.js integrity=sha384-97gW6UIJxnlKemYavrqDHSX3SiygeOwIZhwyOKRfSaf0JWKRVj9hLASHgFTzT+0O crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"\\[",right:"\\]",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1}],throwOnError:!1})})</script></body></html>

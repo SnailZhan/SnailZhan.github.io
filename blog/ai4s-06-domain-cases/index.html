@@ -1,0 +1,110 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1"><link rel=canonical href=https://SnailZhan.github.io/blog/ai4s-06-domain-cases/><title>AI4S 空间结构（六）：蛋白质、晶体与网格如何选择模型 - Zhan's Space</title><meta property="og:title" content="AI4S 空间结构（六）：蛋白质、晶体与网格如何选择模型 - Zhan's Space"><meta property="og:site_name" content="Zhan's Space"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:published_time" content="2026-10-02T14:00:00+08:00"><meta property="article:modified_time" content="2026-10-02T14:00:00+08:00"><meta property="article:tag" content="AI4S"><meta property="article:tag" content="GVP-GNN"><meta property="article:tag" content="CGCNN"><meta property="article:tag" content="MeshGraphNets"><meta property="article:author" content><meta property="og:image" content="https://SnailZhan.github.io/img/avatar.jpg"><meta property="og:image:width" content="400"><meta property="og:image:height" content="400"><meta property="og:image:alt" content="AI4S 空间结构（六）：蛋白质、晶体与网格如何选择模型"><meta property="og:url" content="https://SnailZhan.github.io/blog/ai4s-06-domain-cases/"><meta property="og:description" content="通过 GVP-GNN、CGCNN 和 MeshGraphNets 比较三类科学对象的构图、几何通道、输出和验证边界。"><meta name=Description property="description" content="通过 GVP-GNN、CGCNN 和 MeshGraphNets 比较三类科学对象的构图、几何通道、输出和验证边界。"><meta name=keywords content="ai4s,gvp-gnn,cgcnn,meshgraphnets"><link rel=stylesheet href=https://SnailZhan.github.io/css/style.min.css><link rel=icon type=image/svg+xml href=/favicon.svg><link rel="shortcut icon" href=/favicon.svg><link rel=manifest href=/site.webmanifest><link href=https://SnailZhan.github.io/index.xml type=application/atom+xml rel=alternate title="Sitewide Atom feed"><meta name=theme-color content="#f5f5f5" media="(prefers-color-scheme: light)"><meta name=theme-color content="#27272a" media="(prefers-color-scheme: dark)"><script>function updateMode(){localStorage.theme==="dark"||!("theme"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function toggleMode(){localStorage.theme==="dark"?localStorage.theme="light":localStorage.theme="dark",updateMode()}window.onload=updateMode();function toggleMenu(){let e=document.getElementById("navbar-default");e.classList.contains("hidden")?e.classList.remove("hidden"):e.classList.add("hidden")}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/SnailZhan.github.io\/blog\/ai4s-06-domain-cases\/"},"headline":"AI4S 空间结构（六）：蛋白质、晶体与网格如何选择模型","description":"通过 GVP-GNN、CGCNN 和 MeshGraphNets 比较三类科学对象的构图、几何通道、输出和验证边界。","datePublished":"2026-10-02T14:00:00\u002b08:00","dateModified":"2026-10-02T14:00:00\u002b08:00","author":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"publisher":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"wordCount":327,"keywords":["AI4S","GVP-GNN","CGCNN","MeshGraphNets"]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/SnailZhan.github.io\/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https:\/\/SnailZhan.github.io\/blog\/"},{"@type":"ListItem","position":3,"name":"AI4S 空间结构（六）：蛋白质、晶体与网格如何选择模型","item":"https:\/\/SnailZhan.github.io\/blog\/ai4s-06-domain-cases\/"}]}</script></head><body><header class="md:px-0 px-2"><nav><div class="container flex flex-wrap justify-between items-center mx-auto"><div class="nav-main my-2.5"><a href=https://SnailZhan.github.io/ class="nav-title py-2.5 text-2xl
+text-zinc-600 dark:text-zinc-300 hover:border-b-0">Zhan's Space</a></div><button type=button onclick=toggleMenu() class="inline-flex items-center p-2 ml-3
+text-sm text-gray-500
+rounded-lg md:hidden hover:bg-gray-100
+focus:outline-none focus:ring-2
+focus:ring-gray-200 dark:text-gray-400
+dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls=navbar-default aria-expanded=false>
+<span class=sr-only>Open main menu</span>
+<svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4A1 1 0 013 5zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg></button><div class="hidden w-full md:block md:w-auto" id=navbar-default><ul class="grid md:grid-flow-col items-center justify-between text-lg
+my-2.5 grid-cols-1 pl-0 text-center"><li class="p-2.5 md:first:pl-0 md:border-none border-b dark:border-zinc-500 list-none"><a class="text-zinc-600 dark:text-zinc-300
+hover:border-b-0 transition-colors duration-150" href=/blog/>Blog</a></li><li class="h-7 pl-2.5 pr-0 list-none"><button type=button onclick=toggleMode() class=h-full aria-label="Toggle between dark and light mode">
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 hidden dark:inline" id=ligh-mode-button-img alt="A sun icon for switching to light mode" src=https://SnailZhan.github.io/img/light_mode.svg>
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 inline dark:hidden" id=dark-mode-button-img alt="A moon icon for switching to dark mode" src=https://SnailZhan.github.io/img/dark_mode.svg></button></li></ul></div></div></nav></header><main class="content h-card container mt-2 m-auto
+leading-loose md:px-0 px-2 z-0" role=main><div class=article-page><nav class=article-back><a href=https://SnailZhan.github.io/blog/ class=article-back__link><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+All posts</a></nav><header class=article-hero><div class=article-hero__meta><span class=article-hero__eyebrow>Blog Post</span>
+<time class=article-hero__date datetime=2026-10-02T14:00:00+0800 itemprop=datePublished>October 2, 2026
+</time><span class=article-hero__reading-time>10 min read</span></div><h1 class=article-hero__title itemprop=name>AI4S 空间结构（六）：蛋白质、晶体与网格如何选择模型</h1><p class=article-hero__headline itemprop=headline>算法选择不由领域名称决定，而由关系结构、几何信息和输出变换规律共同决定。</p><ul class=article-hero__tags aria-label=Tags><li class=article-hero__tag>AI4S</li><li class=article-hero__tag>GVP-GNN</li><li class=article-hero__tag>CGCNN</li><li class=article-hero__tag>MeshGraphNets</li></ul></header><article class="article-body e-content h-entry" itemprop=mainEntity itemscope itemtype=http://schema.org/BlogPosting><meta itemprop=author content="Yuxuan Zhan"><blockquote><p>系列导航：<a href=/blog/ai4s-05-equivariant-networks/>上一篇：从不变性到等变网络</a> · 第 6 篇 · <a href=/blog/ai4s-07-trustworthy-modeling/>下一篇：从预测到可信科学计算</a></p></blockquote><p>前几篇从统一数学结构出发，依次建立了图表示、消息传递、三维不变量和等变映射。把这些方法用于真实科学问题时，不能只问“哪个模型更新”，而应先识别对象、关系、输入几何、输出类型和验证尺度。本篇用蛋白质、周期晶体和不规则网格三个案例说明，同一套图学习语言如何产生不同的模型选择。</p><h2 id=蛋白质序列关系与空间关系并存>蛋白质：序列关系与空间关系并存</h2><p>给定已知或候选蛋白质结构，可以把残基表示为节点。节点标量可包含氨基酸类型、二面角编码和序列位置，向量特征可包含主链方向、侧链方向或局部几何轴。边既可表示序列邻接，也可表示三维空间接触。</p><p>蛋白质图的困难不只是节点数较大。两个序列位置相距很远的残基可能在折叠后相互接触；反过来，序列相邻并不代表它们承担同一种空间作用。只使用序列边会遗漏远程接触，只使用短半径空间边又可能削弱链的连续性。一个常见构造是</p>$$
+E=E_{\text{seq}}\cup E_{\text{spatial}},
+$$<p>并在边特征中记录关系类型与相对序列位置。</p><h3 id=gvp-如何同时处理标量和向量>GVP 如何同时处理标量和向量</h3><p>Geometric Vector Perceptron（GVP）把一个节点状态写成</p>$$
+(\mathbf s,\mathbf V),
+\qquad
+\mathbf s\in\mathbb R^{d_s},\quad
+\mathbf V\in\mathbb R^{d_v\times3}.
+$$<p>$\mathbf s$ 保存旋转不变标量，$\mathbf V$ 的每一行保存一个三维向量。对旋转 $Q\in SO(3)$，约定</p>$$
+\mathbf s^{\prime}=\mathbf s,
+\qquad
+\mathbf V^{\prime}=\mathbf VQ^{\mathsf T}.
+$$<p>一个简化的 GVP 块先只在线性通道维上混合向量</p>$$
+\mathbf V_h=W_h\mathbf V,
+$$<p>再计算每个向量通道的模长</p>$$
+\mathbf n=\left(
+\lVert\mathbf V_{h,1}\rVert_2,\ldots,
+\lVert\mathbf V_{h,d_h}\rVert_2
+\right).
+$$<p>由于 $(\mathbf V_hQ^{\mathsf T})(\mathbf V_hQ^{\mathsf T})^{\mathsf T}=\mathbf V_h\mathbf V_h^{\mathsf T}$，$\mathbf n$ 在旋转下不变。标量通道可由</p>$$
+\mathbf s^{\prime}=\phi_s([\mathbf s;\mathbf n])
+$$<p>更新，向量通道则用标量门控</p>$$
+\mathbf V^{\prime}
+=\boldsymbol\gamma(\mathbf s^{\prime})\odot(W_o\mathbf V_h).
+$$<p>$\boldsymbol\gamma$ 对每个向量通道输出一个标量，$\odot$ 表示将该标量乘到对应三维向量上。标量门控不改变方向变换规律，因此输出向量仍然等变。</p><p><img src=/img/blog/ai4s/06-gvp-protein.png alt="GVP-GNN 从已知蛋白质结构学习标量与方向特征。"></p><p>图 1：残基空间图、标量—向量通道与任务输出。GVP 原工作验证的是结构质量评估和给定骨架的序列设计，并非直接从序列生成结构。图源为本系列配套课件。</p><p>这一案例的边界很关键。GVP-GNN 说明已知三维结构上的关系与方向信息可以统一建模，不代表所有蛋白质任务都应使用残基级 GVP。全原子作用、配体结合、构象变化和大尺度协同需要不同分辨率，常常还需要局部图与全局通道结合。</p><h2 id=周期晶体边界之外仍是同一材料>周期晶体：边界之外仍是同一材料</h2><p>晶体由晶格矩阵 $\mathbf L$ 和晶胞内原子位置共同定义。对节点 $i,j$ 与晶格平移 $\mathbf n\in\mathbb Z^3$，周期边使用</p>$$
+\mathbf r_{ij\mathbf n}=\mathbf r_j+\mathbf L\mathbf n-\mathbf r_i.
+$$<p>同一对晶胞内节点可以因不同 $\mathbf n$ 形成多条边。若忽略这些周期像，晶胞边界附近原子的配位环境会被错误截断。</p><h3 id=cgcnn-的门控图卷积>CGCNN 的门控图卷积</h3><p>CGCNN 将周期晶体表示为无向多重图。令 $\mathbf v_i^{(t)}$ 为第 $t$ 层原子特征，$\mathbf u_{ij}^{(k)}$ 为节点 $i,j$ 之间第 $k$ 条周期边的特征，拼接向量</p>$$
+\mathbf z_{ij}^{(t,k)}
+=\mathbf v_i^{(t)}\oplus
+\mathbf v_j^{(t)}\oplus
+\mathbf u_{ij}^{(k)}.
+$$<p>一个门控更新写为</p>$$
+\mathbf v_i^{(t+1)}
+=\mathbf v_i^{(t)}+
+\sum_{j,k}
+\sigma\!\left(
+\mathbf z_{ij}^{(t,k)}W_f^{(t)}+\mathbf b_f^{(t)}
+\right)
+\odot
+g\!\left(
+\mathbf z_{ij}^{(t,k)}W_s^{(t)}+\mathbf b_s^{(t)}
+\right).
+$$<p>$\sigma$ 是 sigmoid 门，$g$ 是非线性候选消息。门控项决定哪些邻居通道进入更新，求和保证邻居顺序不影响结果。多层卷积后，置换不变池化得到晶体表示，再预测形成能、带隙或弹性性质等标量。</p><p><img src=/img/blog/ai4s/06-cgcnn-crystal.png alt="CGCNN 用周期多重图表示跨晶胞邻接。"></p><p>图 2：已知晶体结构经过周期构图、局部卷积和晶体级读出得到性质预测。图源为本系列配套课件。</p><p>CGCNN 使用 Materials Project 的高通量 DFT 数据训练。原论文清理后包含 46,744 个晶体，并对 8 类性质建模；形成能测试 MAE 为 0.039 eV/atom。这个数字衡量模型复现特定数据快照和计算口径下 DFT 标签的误差，不是相对于实验真值的误差。Materials Project 提供数据基础设施，CGCNN 则是独立研究团队提出的模型，两者也不应混为一个方法。</p><p>CGCNN 的主要隐状态是标量，适合展示周期关系、局部环境与图级标量读出。若任务改为结构弛豫、原子力或晶格应力，还需要输出相应的向量或张量，并保证其空间变换规律。</p><h2 id=不规则网格图是数值离散的一部分>不规则网格：图是数值离散的一部分</h2><p>有限元或有限体积计算将连续区域离散为节点和单元。网格边描述离散算子中的局部连接，节点特征可包含位置、速度、压力、材料参数和边界条件。与原子图不同，网格边不一定代表微观物理相互作用，它还承担数值离散和信息传输的角色。</p><p>MeshGraphNets 采用 encode–process–decode 结构。编码器把原始节点和边属性映射到潜在状态；处理器重复执行消息传递</p>$$
+\mathbf m_{ij}^{(\ell)}
+=\phi_e^{(\ell)}\!\left(
+\mathbf e_{ij}^{(\ell)},
+\mathbf h_i^{(\ell)},
+\mathbf h_j^{(\ell)}
+\right),
+$$$$
+\mathbf h_i^{(\ell+1)}
+=\phi_v^{(\ell)}\!\left(
+\mathbf h_i^{(\ell)},
+\sum_{j\in\mathcal N(i)}\mathbf m_{ij}^{(\ell)}
+\right),
+$$<p>解码器再预测速度、加速度或其他状态增量 $\Delta\mathbf q_i$。数值时间推进可抽象为</p>$$
+\mathbf q_i^{(t+1)}
+=\mathcal I\!\left(
+\mathbf q_i^{(t)},\Delta\mathbf q_i^{(t)},\Delta t
+\right),
+$$<p>其中 $\mathcal I$ 是所选更新规则，$\Delta t$ 是时间步长。</p><p><img src=/img/blog/ai4s/06-meshgraphnets.png alt="MeshGraphNets 区分网格拓扑边与世界空间接触边。"></p><p>图 3：不规则网格上的消息传递与时间更新。图源为本系列配套课件。</p><p>布料发生折叠时，网格拓扑上相距很远的部分可能在世界空间中接触。模型可同时使用固定网格边 $E_{\text{mesh}}$ 与动态接触边 $E_{\text{world}}$。前者保持离散结构，后者处理碰撞或近距离作用。</p><p>学习到的时间步进器并不因为使用图网络就自动守恒或长期稳定。单步误差会在滚动预测中累积，动态重网格还会改变节点对应关系。验证需要包含长时间 rollout、守恒量漂移、不同网格分辨率和边界条件外推，而不能只报告下一步均方误差。</p><h2 id=三个案例的共同决策表>三个案例的共同决策表</h2><table><thead><tr><th>决策问题</th><th>蛋白质 GVP-GNN</th><th>周期晶体 CGCNN</th><th>MeshGraphNets</th></tr></thead><tbody><tr><td>节点</td><td>原子或残基</td><td>晶胞内原子</td><td>网格顶点或单元</td></tr><tr><td>边</td><td>序列邻接与空间接触</td><td>含周期像的多重边</td><td>网格拓扑边与动态世界边</td></tr><tr><td>关键几何</td><td>局部方向、距离、构象</td><td>周期距离与局部配位</td><td>相对位置、单元几何、边界条件</td></tr><tr><td>典型输出</td><td>结构质量、序列相容性、局部方向量</td><td>形成能、带隙等晶体标量</td><td>下一时刻节点状态</td></tr><tr><td>主要边界</td><td>多尺度与长程协同</td><td>DFT 标签口径、周期与多晶型</td><td>长期稳定、守恒和重网格</td></tr></tbody></table><p>模型名称不是决策起点。更可靠的顺序是：定义节点与关系，写出几何信息，确定输出在变换下的类型，再选择不变或等变计算。即使两个任务都使用 GNN，它们的图、状态、读出和验证也可能完全不同。</p><h2 id=参考资料>参考资料</h2><ol><li>Jing B, et al. <a href="https://openreview.net/pdf?id=1YLJDvSx6J4">Learning from Protein Structure with Geometric Vector Perceptrons</a>. ICLR, 2021.</li><li>Jain A, et al. <a href=https://doi.org/10.1063/1.4812323>The Materials Project</a>. APL Materials, 2013.</li><li>Xie T, Grossman J C. <a href=https://doi.org/10.1103/PhysRevLett.120.145301>Crystal Graph Convolutional Neural Networks</a>. Physical Review Letters, 2018.</li><li>Pfaff T, et al. <a href=https://sites.google.com/view/meshgraphnets/home>Learning Mesh-Based Simulation with Graph Networks</a>. ICLR, 2021.</li></ol><p><a href=/blog/ai4s-05-equivariant-networks/>上一篇：从不变性到等变网络</a> · <a href=/blog/ai4s-07-trustworthy-modeling/>下一篇：从模型预测到可信科学计算</a></p><ul class="list-none pl-0 font-sm align-left"><li class=list-none>Tags:
+<a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/ai4s><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+AI4S
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/gvp-gnn><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+GVP-GNN
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/cgcnn><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+CGCNN
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/meshgraphnets><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+MeshGraphNets</span></a></li></ul></article><nav class=article-footer-nav><a class="article-nav-link article-nav-link--prev" href=https://SnailZhan.github.io/blog/ai4s-05-equivariant-networks/><span class=article-nav-link__label>Previous</span>
+<span class=article-nav-link__title>AI4S 空间结构（五）：从不变性到等变网络</span>
+</a><a class="article-nav-link article-nav-link--next" href=https://SnailZhan.github.io/blog/ai4s-07-trustworthy-modeling/><span class=article-nav-link__label>Next</span>
+<span class=article-nav-link__title>AI4S 空间结构（七）：从模型预测到可信科学计算</span></a></nav></div></main><footer class="footer container h-10 text-center mt-1"><hr class=my-4><ul class="pl-0 mt-1"><li class="ml-2 first:before:content-none before:content-['•']
+inline-block list-none"><a class="ml-2 text-neutral-800
+dark:text-neutral-400 border-none" href=https://github.com/hugcis/hugo-astatine-theme>Code</a></li><li class="ml-2 first:before:content-none before:content-['•']
+text-neutral-800 dark:text-neutral-400 inline-block list-none"><span class=ml-2>© 2026</span></li></ul></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css integrity=sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/ crossorigin=anonymous><style>.article-body{min-width:0;overflow-x:hidden}.article-body .katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:.25rem 0}@media(max-width:640px){.article-body .katex-display>.katex{text-align:left}}</style><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.js integrity=sha384-97gW6UIJxnlKemYavrqDHSX3SiygeOwIZhwyOKRfSaf0JWKRVj9hLASHgFTzT+0O crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"\\[",right:"\\]",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1}],throwOnError:!1})})</script></body></html>

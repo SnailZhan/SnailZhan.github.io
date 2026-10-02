@@ -1,0 +1,75 @@
+<!doctype html><html lang=en-us><head><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1,minimum-scale=1"><link rel=canonical href=https://SnailZhan.github.io/blog/ai4s-02-graph-construction/><title>AI4S 空间结构（二）：把科学对象写成图 - Zhan's Space</title><meta property="og:title" content="AI4S 空间结构（二）：把科学对象写成图 - Zhan's Space"><meta property="og:site_name" content="Zhan's Space"><meta property="og:locale" content="en_us"><meta property="og:type" content="article"><meta property="article:published_time" content="2026-10-02T10:00:00+08:00"><meta property="article:modified_time" content="2026-10-02T10:00:00+08:00"><meta property="article:tag" content="AI4S"><meta property="article:tag" content="Graph Representation"><meta property="article:tag" content="Geometric Deep Learning"><meta property="article:tag" content="Tutorial"><meta property="article:author" content><meta property="og:image" content="https://SnailZhan.github.io/img/avatar.jpg"><meta property="og:image:width" content="400"><meta property="og:image:height" content="400"><meta property="og:image:alt" content="AI4S 空间结构（二）：把科学对象写成图"><meta property="og:url" content="https://SnailZhan.github.io/blog/ai4s-02-graph-construction/"><meta property="og:description" content="系统定义科学图中的节点、边、坐标和周期像，并比较化学键图、半径图、kNN 图与动态图。"><meta name=Description property="description" content="系统定义科学图中的节点、边、坐标和周期像，并比较化学键图、半径图、kNN 图与动态图。"><meta name=keywords content="ai4s,graph representation,geometric deep learning,tutorial"><link rel=stylesheet href=https://SnailZhan.github.io/css/style.min.css><link rel=icon type=image/svg+xml href=/favicon.svg><link rel="shortcut icon" href=/favicon.svg><link rel=manifest href=/site.webmanifest><link href=https://SnailZhan.github.io/index.xml type=application/atom+xml rel=alternate title="Sitewide Atom feed"><meta name=theme-color content="#f5f5f5" media="(prefers-color-scheme: light)"><meta name=theme-color content="#27272a" media="(prefers-color-scheme: dark)"><script>function updateMode(){localStorage.theme==="dark"||!("theme"in localStorage)&&window.matchMedia("(prefers-color-scheme: dark)").matches?document.documentElement.classList.add("dark"):document.documentElement.classList.remove("dark")}function toggleMode(){localStorage.theme==="dark"?localStorage.theme="light":localStorage.theme="dark",updateMode()}window.onload=updateMode();function toggleMenu(){let e=document.getElementById("navbar-default");e.classList.contains("hidden")?e.classList.remove("hidden"):e.classList.add("hidden")}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https:\/\/SnailZhan.github.io\/blog\/ai4s-02-graph-construction\/"},"headline":"AI4S 空间结构（二）：把科学对象写成图","description":"系统定义科学图中的节点、边、坐标和周期像，并比较化学键图、半径图、kNN 图与动态图。","datePublished":"2026-10-02T10:00:00\u002b08:00","dateModified":"2026-10-02T10:00:00\u002b08:00","author":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"publisher":{"@type":"Person","name":"","url":"https:\/\/SnailZhan.github.io\/"},"wordCount":68,"keywords":["AI4S","Graph Representation","Geometric Deep Learning","Tutorial"]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https:\/\/SnailZhan.github.io\/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https:\/\/SnailZhan.github.io\/blog\/"},{"@type":"ListItem","position":3,"name":"AI4S 空间结构（二）：把科学对象写成图","item":"https:\/\/SnailZhan.github.io\/blog\/ai4s-02-graph-construction\/"}]}</script></head><body><header class="md:px-0 px-2"><nav><div class="container flex flex-wrap justify-between items-center mx-auto"><div class="nav-main my-2.5"><a href=https://SnailZhan.github.io/ class="nav-title py-2.5 text-2xl
+text-zinc-600 dark:text-zinc-300 hover:border-b-0">Zhan's Space</a></div><button type=button onclick=toggleMenu() class="inline-flex items-center p-2 ml-3
+text-sm text-gray-500
+rounded-lg md:hidden hover:bg-gray-100
+focus:outline-none focus:ring-2
+focus:ring-gray-200 dark:text-gray-400
+dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls=navbar-default aria-expanded=false>
+<span class=sr-only>Open main menu</span>
+<svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4A1 1 0 013 5zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/></svg></button><div class="hidden w-full md:block md:w-auto" id=navbar-default><ul class="grid md:grid-flow-col items-center justify-between text-lg
+my-2.5 grid-cols-1 pl-0 text-center"><li class="p-2.5 md:first:pl-0 md:border-none border-b dark:border-zinc-500 list-none"><a class="text-zinc-600 dark:text-zinc-300
+hover:border-b-0 transition-colors duration-150" href=/blog/>Blog</a></li><li class="h-7 pl-2.5 pr-0 list-none"><button type=button onclick=toggleMode() class=h-full aria-label="Toggle between dark and light mode">
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 hidden dark:inline" id=ligh-mode-button-img alt="A sun icon for switching to light mode" src=https://SnailZhan.github.io/img/light_mode.svg>
+<img class="h-7 w-7 max-h-full mb-1.5 p-1.5 inline dark:hidden" id=dark-mode-button-img alt="A moon icon for switching to dark mode" src=https://SnailZhan.github.io/img/dark_mode.svg></button></li></ul></div></div></nav></header><main class="content h-card container mt-2 m-auto
+leading-loose md:px-0 px-2 z-0" role=main><div class=article-page><nav class=article-back><a href=https://SnailZhan.github.io/blog/ class=article-back__link><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5m7-7-7 7 7 7"/></svg>
+All posts</a></nav><header class=article-hero><div class=article-hero__meta><span class=article-hero__eyebrow>Blog Post</span>
+<time class=article-hero__date datetime=2026-10-02T10:00:00+0800 itemprop=datePublished>October 2, 2026
+</time><span class=article-hero__reading-time>3 min read</span></div><h1 class=article-hero__title itemprop=name>AI4S 空间结构（二）：把科学对象写成图</h1><p class=article-hero__headline itemprop=headline>构图不是中性的预处理，每一条边都规定了模型能够直接计算哪些相互作用。</p><ul class=article-hero__tags aria-label=Tags><li class=article-hero__tag>AI4S</li><li class=article-hero__tag>Graph Representation</li><li class=article-hero__tag>Geometric Deep Learning</li><li class=article-hero__tag>Tutorial</li></ul></header><article class="article-body e-content h-entry" itemprop=mainEntity itemscope itemtype=http://schema.org/BlogPosting><meta itemprop=author content="Yuxuan Zhan"><blockquote><p>系列导航：<a href=/blog/ai4s-01-scientific-space/>上一篇：为什么科学智能必须看见空间</a> · 第 2 篇 · <a href=/blog/ai4s-03-message-passing/>下一篇：消息传递为什么成立</a></p></blockquote><p>图是一种关系表示，不是某个特定神经网络的名称。把科学对象写成图时，我们已经决定了什么是基本单元、哪些单元可以直接交换信息，以及哪些几何或物理量会交给模型。后续网络只能在这个表示上学习，因此构图本身就是模型假设的一部分。</p><p><img src=/img/blog/ai4s/02-graph-construction.png alt=同一组节点可以依据不同科学假设构成不同的图。></p><p>图 1：化学键图、半径图、kNN 图、周期图和动态图表达不同的邻接假设。图源为本系列配套课件。</p><h2 id=图特征与坐标>图、特征与坐标</h2><p>一个带几何信息的属性图可写为</p>$$
+G=(V,E,\mathbf H,\mathbf E_f,\mathbf R).
+$$<p>$V=\{1,\ldots,N\}$ 是节点集；$E\subseteq V\times V$ 是边集；$\mathbf H\in\mathbb R^{N\times d_h}$ 收集节点特征；$\mathbf E_f\in\mathbb R^{|E|\times d_e}$ 收集边特征；$\mathbf R\in\mathbb R^{N\times 3}$ 保存节点坐标。这里用 $\mathbf E_f$ 区分“边特征矩阵”和边集合 $E$。</p><p>节点的含义取决于分辨率。分子图常以原子为节点，蛋白质可以选择原子、残基或更粗的结构单元，有限元问题可用网格顶点或单元作为节点。分辨率越细，局部几何越完整，节点数和计算成本也越高。粗粒化并非简单删点，它还要求重新定义边与输出。</p><h2 id=化学键图表达连接不一定表达空间接触>化学键图：表达连接，不一定表达空间接触</h2><p>二维分子图通常按照化学键建立邻接矩阵 $\mathbf A$：</p>$$
+A_{ij}=
+\begin{cases}
+1, & \text{原子 }i\text{ 与 }j\text{ 之间存在化学键},\\
+0, & \text{其他情形}.
+\end{cases}
+$$<p>边特征可以包含键级、芳香性、共轭状态或立体标记。这类表示适合官能团识别、二维结构分类和许多分子性质基线，但它没有自动记录非键接触。同一分子折叠后，空间中接近的两个原子可能在键图上相距许多跳；若目标依赖构象、分子内氢键或配体—受体接触，只使用键图会遗漏直接相关的几何关系。</p><h2 id=半径图让局部空间邻近成为边>半径图：让局部空间邻近成为边</h2><p>给定截断半径 $r_c>0$，半径图定义为</p>$$
+E_{r_c}=\left\{(i,j):i\neq j,\ \lVert\mathbf r_j-\mathbf r_i\rVert_2<r_c\right\}. $$<p>节点 $i$ 的邻域为</p>$$
+\mathcal N(i)=\{j:(i,j)\in E_{r_c}\}.
+$$<p>这种构图假设局部相互作用最重要。若体系密度近似稳定，平均邻居数不会随 $N$ 无限增长，边数 $|E|$ 便近似与节点数成正比，为大体系的线性扩展提供条件。</p><p>硬截断会在 $d_{ij}=r_c$ 处产生不连续：原子只移动一个很小距离，边就可能突然出现或消失。原子势通常再乘一个平滑截断函数。例如</p>$$
+c(d)=
+\begin{cases}
+\frac12\left[\cos\left(\frac{\pi d}{r_c}\right)+1\right], & 0\le d<r_c,\\ 0, & d\ge r_c. \end{cases} $$<p>$c(d)$ 在截断处连续降到零，能减弱邻域改变对能量和力的突变。平滑函数并没有恢复 $r_c$ 之外的物理相互作用，它只改善截断边界的连续性。</p><h2 id=knn-图固定邻居数带来的取舍>kNN 图：固定邻居数带来的取舍</h2><p>k 近邻图将每个节点连接到距离最近的 $k$ 个节点：</p>$$
+\mathcal N_k(i)=\operatorname*{arg\,topk}_{j\ne i}\bigl(-d_{ij}\bigr).
+$$<p>每个节点的计算量因此更稳定，但几何作用范围会随局部密度改变。稀疏区域中的第 $k$ 个邻居可能很远，致密区域中真正相关的第 $k+1$ 个邻居又会被删除。原始 kNN 关系还可能是有向的：$j$ 属于 $i$ 的近邻，并不保证 $i$ 也属于 $j$ 的近邻。任务若要求成对相互作用对称，需要显式对称化边集或在消息函数中处理方向。</p><h2 id=周期图同一节点对可能对应多条边>周期图：同一节点对可能对应多条边</h2><p>晶体用晶格矩阵 $\mathbf L\in\mathbb R^{3\times3}$ 和晶胞内坐标描述。对晶胞内节点 $i,j$，周期像的相对位移为</p>$$
+\mathbf r_{ij\mathbf n}
+=\mathbf r_j+\mathbf L\mathbf n-\mathbf r_i,
+\qquad \mathbf n\in\mathbb Z^3.
+$$<p>若 $\lVert\mathbf r_{ij\mathbf n}\rVert_2<r_c$，就建立一条带平移索引 $\mathbf n$ 的边 $(i,j,\mathbf n)$。不同 $\mathbf n$ 可能让同一对晶胞内节点产生多条边，因此周期晶体自然形成多重图。周期像不是新原子，但跨边界邻接是真实局部环境的一部分。若只在当前晶胞内部建边，边界原子的配位会被错误截断。</p><h2 id=动态图关系也会随状态变化>动态图：关系也会随状态变化</h2><p>在流体、碰撞、断键成键或大形变系统中，邻接关系依赖当前坐标：</p>$$
+E^{(t)}=\mathcal B\bigl(\mathbf R^{(t)}\bigr),
+$$<p>其中 $\mathcal B$ 是构图算子。时间推进后应重新计算 $E^{(t+1)}$。把初始图永久固定，等于假设相互作用关系不会变化；在接触网络或反应过程中，这个假设通常不成立。</p><p>动态图还引入一个实现问题：构图算子往往包含近邻搜索或离散排序，它不一定处处可微。多数模型将“根据当前坐标更新邻居”和“在固定邻域内对坐标求导”分开处理。能量对坐标的梯度可以在当前边集内计算，但跨越截断边界时仍需检查连续性。</p><h2 id=多尺度关系不能全部塞进一种边>多尺度关系不能全部塞进一种边</h2><p>蛋白质同时具有共价连接、序列邻接、空间接触与更长程的协同关系；网格模拟既有固定的网格拓扑边，也可能有因碰撞产生的世界空间边。将所有关系混为一个无类型边集会丢失语义。常见处理是为边增加关系类型 $\tau_{ij}$，或者构建多个关系集合</p>$$
+E=E_{\text{bond}}\cup E_{\text{spatial}}\cup E_{\text{global}},
+$$<p>再为不同关系使用不同消息函数。模型由此能够区分“沿化学键传播”和“通过空间接触交互”，同时保留统一的图计算框架。</p><h2 id=构图必须与验证一起设计>构图必须与验证一起设计</h2><p>构图决定模型看见什么，也决定它看不见什么。半径图若截断过小，会遗漏长程作用；截断过大则增加边数，并可能把大量弱相关信息压入有限通道。kNN 图固定计算量，却改变了不同密度区域的物理尺度。周期图需要验证晶格平移和多重边是否正确。动态图要检查邻域变化是否造成预测跳变。</p><p>因此，构图参数不能只凭经验设定。截断半径、邻居数、边类型和更新频率都应进入消融实验。模型在一个构图上取得较低误差，只能说明“网络与这套关系假设的组合”有效，不能单独归因于网络架构。</p><h2 id=参考资料>参考资料</h2><ol><li>Gilmer J, et al. <a href=https://proceedings.mlr.press/v70/gilmer17a.html>Neural Message Passing for Quantum Chemistry</a>. ICML, 2017.</li><li>Xie T, Grossman J C. <a href=https://doi.org/10.1103/PhysRevLett.120.145301>Crystal Graph Convolutional Neural Networks for an Accurate and Interpretable Prediction of Material Properties</a>. Physical Review Letters, 2018.</li><li>Pfaff T, et al. <a href=https://sites.google.com/view/meshgraphnets/home>Learning Mesh-Based Simulation with Graph Networks</a>. ICLR, 2021.</li></ol><p><a href=/blog/ai4s-01-scientific-space/>上一篇：为什么科学智能必须看见空间</a> · <a href=/blog/ai4s-03-message-passing/>下一篇：从图表示到图神经网络</a></p><ul class="list-none pl-0 font-sm align-left"><li class=list-none>Tags:
+<a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/ai4s><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+AI4S
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/graph-representation><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Graph Representation
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/geometric-deep-learning><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Geometric Deep Learning
+</span></a><a class="inline-block mt-2 mr-2 border-none text-neutral-800 dark:text-neutral-200" href=/tags/tutorial><span class="flex flex-row justify-start items-center
+dark:bg-zinc-900 dark:hover:bg-zinc-700
+hover:bg-zinc-300 bg-zinc-200
+dark:border-zinc-600 py-0.5
+px-1 rounded-t border-b-2 border-zinc-300
+hover:border-zinc-500"><img class="h-4 mr-2 inline" src=https://SnailZhan.github.io/images/tag_logo.svg alt="Logo of a tag: indicates that a tag item follows.">
+Tutorial</span></a></li></ul></article><nav class=article-footer-nav><a class="article-nav-link article-nav-link--prev" href=https://SnailZhan.github.io/blog/ai4s-01-scientific-space/><span class=article-nav-link__label>Previous</span>
+<span class=article-nav-link__title>AI4S 空间结构（一）：为什么科学智能必须看见空间</span>
+</a><a class="article-nav-link article-nav-link--next" href=https://SnailZhan.github.io/blog/ai4s-03-message-passing/><span class=article-nav-link__label>Next</span>
+<span class=article-nav-link__title>AI4S 空间结构（三）：消息传递为什么成立</span></a></nav></div></main><footer class="footer container h-10 text-center mt-1"><hr class=my-4><ul class="pl-0 mt-1"><li class="ml-2 first:before:content-none before:content-['•']
+inline-block list-none"><a class="ml-2 text-neutral-800
+dark:text-neutral-400 border-none" href=https://github.com/hugcis/hugo-astatine-theme>Code</a></li><li class="ml-2 first:before:content-none before:content-['•']
+text-neutral-800 dark:text-neutral-400 inline-block list-none"><span class=ml-2>© 2026</span></li></ul></footer><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.css integrity=sha384-Juol1FqnotbkyZUT5Z7gUPjQ9gzlwCENvUZTpQBAPxtusdwFLRy382PSDx5UUJ4/ crossorigin=anonymous><style>.article-body{min-width:0;overflow-x:hidden}.article-body .katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden;padding:.25rem 0}@media(max-width:640px){.article-body .katex-display>.katex{text-align:left}}</style><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/katex.min.js integrity=sha384-97gW6UIJxnlKemYavrqDHSX3SiygeOwIZhwyOKRfSaf0JWKRVj9hLASHgFTzT+0O crossorigin=anonymous></script><script defer src=https://cdn.jsdelivr.net/npm/katex@0.16.3/dist/contrib/auto-render.min.js integrity=sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05 crossorigin=anonymous></script><script>document.addEventListener("DOMContentLoaded",function(){renderMathInElement(document.body,{delimiters:[{left:"$$",right:"$$",display:!0},{left:"\\[",right:"\\]",display:!0},{left:"$",right:"$",display:!1},{left:"\\(",right:"\\)",display:!1}],throwOnError:!1})})</script></body></html>
